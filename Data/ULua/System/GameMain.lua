@@ -1,3 +1,5 @@
+require "Data/ULua/System/CommonRequire";
+
 local _M = {
 	LuaManager = nil;
 	gameLoop = nil;

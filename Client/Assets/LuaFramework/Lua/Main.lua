@@ -5,7 +5,6 @@ function Main()
 
 	-- 增加路径支持 这个路径就是我们以后的lua脚本的根路径
 	package.path = package.path..";F:/work/unity/SmallEyeGame/?.lua"
-	require "Data/Ulua/System/Global";
 	require "Data/ULua/System/GameMain";
 end
 
