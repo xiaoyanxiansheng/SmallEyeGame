@@ -1,5 +1,5 @@
 
-function clone(object)
+function Clone(object)
     local lookup_table = {}
     local function _copy(object)
         if type(object) ~= "table" then
@@ -17,7 +17,7 @@ function clone(object)
     return _copy(object)
 end
 
-function shallow_copy(orig)
+function Shallow_copy(orig)
     local copy
     if type(orig) == "table" then
         copy = {}
@@ -31,7 +31,7 @@ function shallow_copy(orig)
 end
 
 --Create an class.
-function class(classname, super)
+function Class(classname, super)
     local superType = type(super)
     local cls
 
@@ -62,7 +62,7 @@ function class(classname, super)
 end
 ---@param  _table table
 ---@param  interfaceTable table
-function interface(_table,interfaceTable)
+function Interface(_table,interfaceTable)
     if _table and interfaceTable then
         local impl = clone(interfaceTable)
         for k,v in pairs(impl) do

@@ -2,19 +2,19 @@
 using System;
 using LuaInterface;
 
-public class WGTestWrap
+public class CommonUtilWrap
 {
 	public static void Register(LuaState L)
 	{
-		L.BeginClass(typeof(WGTest), typeof(System.Object));
-		L.RegFunction("New", _CreateWGTest);
+		L.BeginClass(typeof(CommonUtil), typeof(System.Object));
+		L.RegFunction("GetUIPanels", GetUIPanels);
+		L.RegFunction("New", _CreateCommonUtil);
 		L.RegFunction("__tostring", ToLua.op_ToString);
-		L.RegVar("aaa", get_aaa, set_aaa);
 		L.EndClass();
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int _CreateWGTest(IntPtr L)
+	static int _CreateCommonUtil(IntPtr L)
 	{
 		try
 		{
@@ -22,13 +22,13 @@ public class WGTestWrap
 
 			if (count == 0)
 			{
-				WGTest obj = new WGTest();
+				CommonUtil obj = new CommonUtil();
 				ToLua.PushObject(L, obj);
 				return 1;
 			}
 			else
 			{
-				return LuaDLL.luaL_throw(L, "invalid arguments to ctor method: WGTest.New");
+				return LuaDLL.luaL_throw(L, "invalid arguments to ctor method: CommonUtil.New");
 			}
 		}
 		catch (Exception e)
@@ -38,27 +38,15 @@ public class WGTestWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_aaa(IntPtr L)
+	static int GetUIPanels(IntPtr L)
 	{
 		try
 		{
-			LuaDLL.lua_pushinteger(L, WGTest.aaa);
+			ToLua.CheckArgsCount(L, 1);
+			UnityEngine.GameObject arg0 = (UnityEngine.GameObject)ToLua.CheckObject(L, 1, typeof(UnityEngine.GameObject));
+			UIPanel[] o = CommonUtil.GetUIPanels(arg0);
+			ToLua.Push(L, o);
 			return 1;
-		}
-		catch (Exception e)
-		{
-			return LuaDLL.toluaL_exception(L, e);
-		}
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int set_aaa(IntPtr L)
-	{
-		try
-		{
-			int arg0 = (int)LuaDLL.luaL_checknumber(L, 2);
-			WGTest.aaa = arg0;
-			return 0;
 		}
 		catch (Exception e)
 		{

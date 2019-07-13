@@ -25,3 +25,5 @@ sysinfo.txt
 
 # MacOS Files
 *.DS_Store
+Client/.vs/
+Client/Assets/AssetBundles/

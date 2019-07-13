@@ -23,6 +23,15 @@ public class DelegateFactory
 		dict.Add(typeof(System.Action<int>), factory.System_Action_int);
 		dict.Add(typeof(System.Comparison<int>), factory.System_Comparison_int);
 		dict.Add(typeof(System.Func<int,int>), factory.System_Func_int_int);
+		dict.Add(typeof(UIEventListener.VoidDelegate), factory.UIEventListener_VoidDelegate);
+		dict.Add(typeof(UIEventListener.BoolDelegate), factory.UIEventListener_BoolDelegate);
+		dict.Add(typeof(UIEventListener.FloatDelegate), factory.UIEventListener_FloatDelegate);
+		dict.Add(typeof(UIEventListener.VectorDelegate), factory.UIEventListener_VectorDelegate);
+		dict.Add(typeof(UIEventListener.ObjectDelegate), factory.UIEventListener_ObjectDelegate);
+		dict.Add(typeof(UIEventListener.KeyCodeDelegate), factory.UIEventListener_KeyCodeDelegate);
+		dict.Add(typeof(RequestLoadBundle.OnCreateAssetBundle), factory.RequestLoadBundle_OnCreateAssetBundle);
+		dict.Add(typeof(RequestLoadAsset.OnLoadAsset), factory.RequestLoadAsset_OnLoadAsset);
+		dict.Add(typeof(GameObjectPool.OnCreateGameObject), factory.GameObjectPool_OnCreateGameObject);
 		dict.Add(typeof(UnityEngine.Camera.CameraCallback), factory.UnityEngine_Camera_CameraCallback);
 		dict.Add(typeof(UnityEngine.Application.LogCallback), factory.UnityEngine_Application_LogCallback);
 		dict.Add(typeof(UnityEngine.Application.AdvertisingIdentifierCallback), factory.UnityEngine_Application_AdvertisingIdentifierCallback);
@@ -44,6 +53,15 @@ public class DelegateFactory
 		DelegateTraits<System.Action<int>>.Init(factory.System_Action_int);
 		DelegateTraits<System.Comparison<int>>.Init(factory.System_Comparison_int);
 		DelegateTraits<System.Func<int,int>>.Init(factory.System_Func_int_int);
+		DelegateTraits<UIEventListener.VoidDelegate>.Init(factory.UIEventListener_VoidDelegate);
+		DelegateTraits<UIEventListener.BoolDelegate>.Init(factory.UIEventListener_BoolDelegate);
+		DelegateTraits<UIEventListener.FloatDelegate>.Init(factory.UIEventListener_FloatDelegate);
+		DelegateTraits<UIEventListener.VectorDelegate>.Init(factory.UIEventListener_VectorDelegate);
+		DelegateTraits<UIEventListener.ObjectDelegate>.Init(factory.UIEventListener_ObjectDelegate);
+		DelegateTraits<UIEventListener.KeyCodeDelegate>.Init(factory.UIEventListener_KeyCodeDelegate);
+		DelegateTraits<RequestLoadBundle.OnCreateAssetBundle>.Init(factory.RequestLoadBundle_OnCreateAssetBundle);
+		DelegateTraits<RequestLoadAsset.OnLoadAsset>.Init(factory.RequestLoadAsset_OnLoadAsset);
+		DelegateTraits<GameObjectPool.OnCreateGameObject>.Init(factory.GameObjectPool_OnCreateGameObject);
 		DelegateTraits<UnityEngine.Camera.CameraCallback>.Init(factory.UnityEngine_Camera_CameraCallback);
 		DelegateTraits<UnityEngine.Application.LogCallback>.Init(factory.UnityEngine_Application_LogCallback);
 		DelegateTraits<UnityEngine.Application.AdvertisingIdentifierCallback>.Init(factory.UnityEngine_Application_AdvertisingIdentifierCallback);
@@ -65,6 +83,15 @@ public class DelegateFactory
 		TypeTraits<System.Action<int>>.Init(factory.Check_System_Action_int);
 		TypeTraits<System.Comparison<int>>.Init(factory.Check_System_Comparison_int);
 		TypeTraits<System.Func<int,int>>.Init(factory.Check_System_Func_int_int);
+		TypeTraits<UIEventListener.VoidDelegate>.Init(factory.Check_UIEventListener_VoidDelegate);
+		TypeTraits<UIEventListener.BoolDelegate>.Init(factory.Check_UIEventListener_BoolDelegate);
+		TypeTraits<UIEventListener.FloatDelegate>.Init(factory.Check_UIEventListener_FloatDelegate);
+		TypeTraits<UIEventListener.VectorDelegate>.Init(factory.Check_UIEventListener_VectorDelegate);
+		TypeTraits<UIEventListener.ObjectDelegate>.Init(factory.Check_UIEventListener_ObjectDelegate);
+		TypeTraits<UIEventListener.KeyCodeDelegate>.Init(factory.Check_UIEventListener_KeyCodeDelegate);
+		TypeTraits<RequestLoadBundle.OnCreateAssetBundle>.Init(factory.Check_RequestLoadBundle_OnCreateAssetBundle);
+		TypeTraits<RequestLoadAsset.OnLoadAsset>.Init(factory.Check_RequestLoadAsset_OnLoadAsset);
+		TypeTraits<GameObjectPool.OnCreateGameObject>.Init(factory.Check_GameObjectPool_OnCreateGameObject);
 		TypeTraits<UnityEngine.Camera.CameraCallback>.Init(factory.Check_UnityEngine_Camera_CameraCallback);
 		TypeTraits<UnityEngine.Application.LogCallback>.Init(factory.Check_UnityEngine_Application_LogCallback);
 		TypeTraits<UnityEngine.Application.AdvertisingIdentifierCallback>.Init(factory.Check_UnityEngine_Application_AdvertisingIdentifierCallback);
@@ -86,6 +113,15 @@ public class DelegateFactory
 		StackTraits<System.Action<int>>.Push = factory.Push_System_Action_int;
 		StackTraits<System.Comparison<int>>.Push = factory.Push_System_Comparison_int;
 		StackTraits<System.Func<int,int>>.Push = factory.Push_System_Func_int_int;
+		StackTraits<UIEventListener.VoidDelegate>.Push = factory.Push_UIEventListener_VoidDelegate;
+		StackTraits<UIEventListener.BoolDelegate>.Push = factory.Push_UIEventListener_BoolDelegate;
+		StackTraits<UIEventListener.FloatDelegate>.Push = factory.Push_UIEventListener_FloatDelegate;
+		StackTraits<UIEventListener.VectorDelegate>.Push = factory.Push_UIEventListener_VectorDelegate;
+		StackTraits<UIEventListener.ObjectDelegate>.Push = factory.Push_UIEventListener_ObjectDelegate;
+		StackTraits<UIEventListener.KeyCodeDelegate>.Push = factory.Push_UIEventListener_KeyCodeDelegate;
+		StackTraits<RequestLoadBundle.OnCreateAssetBundle>.Push = factory.Push_RequestLoadBundle_OnCreateAssetBundle;
+		StackTraits<RequestLoadAsset.OnLoadAsset>.Push = factory.Push_RequestLoadAsset_OnLoadAsset;
+		StackTraits<GameObjectPool.OnCreateGameObject>.Push = factory.Push_GameObjectPool_OnCreateGameObject;
 		StackTraits<UnityEngine.Camera.CameraCallback>.Push = factory.Push_UnityEngine_Camera_CameraCallback;
 		StackTraits<UnityEngine.Application.LogCallback>.Push = factory.Push_UnityEngine_Application_LogCallback;
 		StackTraits<UnityEngine.Application.AdvertisingIdentifierCallback>.Push = factory.Push_UnityEngine_Application_AdvertisingIdentifierCallback;
@@ -555,6 +591,537 @@ public class DelegateFactory
 	}
 
 	void Push_System_Func_int_int(IntPtr L, System.Func<int,int> o)
+	{
+		ToLua.Push(L, o);
+	}
+
+	class UIEventListener_VoidDelegate_Event : LuaDelegate
+	{
+		public UIEventListener_VoidDelegate_Event(LuaFunction func) : base(func) { }
+		public UIEventListener_VoidDelegate_Event(LuaFunction func, LuaTable self) : base(func, self) { }
+
+		public void Call(UnityEngine.GameObject param0)
+		{
+			func.BeginPCall();
+			func.PushSealed(param0);
+			func.PCall();
+			func.EndPCall();
+		}
+
+		public void CallWithSelf(UnityEngine.GameObject param0)
+		{
+			func.BeginPCall();
+			func.Push(self);
+			func.PushSealed(param0);
+			func.PCall();
+			func.EndPCall();
+		}
+	}
+
+	public UIEventListener.VoidDelegate UIEventListener_VoidDelegate(LuaFunction func, LuaTable self, bool flag)
+	{
+		if (func == null)
+		{
+			UIEventListener.VoidDelegate fn = delegate(UnityEngine.GameObject param0) { };
+			return fn;
+		}
+
+		if(!flag)
+		{
+			UIEventListener_VoidDelegate_Event target = new UIEventListener_VoidDelegate_Event(func);
+			UIEventListener.VoidDelegate d = target.Call;
+			target.method = d.Method;
+			return d;
+		}
+		else
+		{
+			UIEventListener_VoidDelegate_Event target = new UIEventListener_VoidDelegate_Event(func, self);
+			UIEventListener.VoidDelegate d = target.CallWithSelf;
+			target.method = d.Method;
+			return d;
+		}
+	}
+
+	bool Check_UIEventListener_VoidDelegate(IntPtr L, int pos)
+	{
+		return TypeChecker.CheckDelegateType(typeof(UIEventListener.VoidDelegate), L, pos);
+	}
+
+	void Push_UIEventListener_VoidDelegate(IntPtr L, UIEventListener.VoidDelegate o)
+	{
+		ToLua.Push(L, o);
+	}
+
+	class UIEventListener_BoolDelegate_Event : LuaDelegate
+	{
+		public UIEventListener_BoolDelegate_Event(LuaFunction func) : base(func) { }
+		public UIEventListener_BoolDelegate_Event(LuaFunction func, LuaTable self) : base(func, self) { }
+
+		public void Call(UnityEngine.GameObject param0, bool param1)
+		{
+			func.BeginPCall();
+			func.PushSealed(param0);
+			func.Push(param1);
+			func.PCall();
+			func.EndPCall();
+		}
+
+		public void CallWithSelf(UnityEngine.GameObject param0, bool param1)
+		{
+			func.BeginPCall();
+			func.Push(self);
+			func.PushSealed(param0);
+			func.Push(param1);
+			func.PCall();
+			func.EndPCall();
+		}
+	}
+
+	public UIEventListener.BoolDelegate UIEventListener_BoolDelegate(LuaFunction func, LuaTable self, bool flag)
+	{
+		if (func == null)
+		{
+			UIEventListener.BoolDelegate fn = delegate(UnityEngine.GameObject param0, bool param1) { };
+			return fn;
+		}
+
+		if(!flag)
+		{
+			UIEventListener_BoolDelegate_Event target = new UIEventListener_BoolDelegate_Event(func);
+			UIEventListener.BoolDelegate d = target.Call;
+			target.method = d.Method;
+			return d;
+		}
+		else
+		{
+			UIEventListener_BoolDelegate_Event target = new UIEventListener_BoolDelegate_Event(func, self);
+			UIEventListener.BoolDelegate d = target.CallWithSelf;
+			target.method = d.Method;
+			return d;
+		}
+	}
+
+	bool Check_UIEventListener_BoolDelegate(IntPtr L, int pos)
+	{
+		return TypeChecker.CheckDelegateType(typeof(UIEventListener.BoolDelegate), L, pos);
+	}
+
+	void Push_UIEventListener_BoolDelegate(IntPtr L, UIEventListener.BoolDelegate o)
+	{
+		ToLua.Push(L, o);
+	}
+
+	class UIEventListener_FloatDelegate_Event : LuaDelegate
+	{
+		public UIEventListener_FloatDelegate_Event(LuaFunction func) : base(func) { }
+		public UIEventListener_FloatDelegate_Event(LuaFunction func, LuaTable self) : base(func, self) { }
+
+		public void Call(UnityEngine.GameObject param0, float param1)
+		{
+			func.BeginPCall();
+			func.PushSealed(param0);
+			func.Push(param1);
+			func.PCall();
+			func.EndPCall();
+		}
+
+		public void CallWithSelf(UnityEngine.GameObject param0, float param1)
+		{
+			func.BeginPCall();
+			func.Push(self);
+			func.PushSealed(param0);
+			func.Push(param1);
+			func.PCall();
+			func.EndPCall();
+		}
+	}
+
+	public UIEventListener.FloatDelegate UIEventListener_FloatDelegate(LuaFunction func, LuaTable self, bool flag)
+	{
+		if (func == null)
+		{
+			UIEventListener.FloatDelegate fn = delegate(UnityEngine.GameObject param0, float param1) { };
+			return fn;
+		}
+
+		if(!flag)
+		{
+			UIEventListener_FloatDelegate_Event target = new UIEventListener_FloatDelegate_Event(func);
+			UIEventListener.FloatDelegate d = target.Call;
+			target.method = d.Method;
+			return d;
+		}
+		else
+		{
+			UIEventListener_FloatDelegate_Event target = new UIEventListener_FloatDelegate_Event(func, self);
+			UIEventListener.FloatDelegate d = target.CallWithSelf;
+			target.method = d.Method;
+			return d;
+		}
+	}
+
+	bool Check_UIEventListener_FloatDelegate(IntPtr L, int pos)
+	{
+		return TypeChecker.CheckDelegateType(typeof(UIEventListener.FloatDelegate), L, pos);
+	}
+
+	void Push_UIEventListener_FloatDelegate(IntPtr L, UIEventListener.FloatDelegate o)
+	{
+		ToLua.Push(L, o);
+	}
+
+	class UIEventListener_VectorDelegate_Event : LuaDelegate
+	{
+		public UIEventListener_VectorDelegate_Event(LuaFunction func) : base(func) { }
+		public UIEventListener_VectorDelegate_Event(LuaFunction func, LuaTable self) : base(func, self) { }
+
+		public void Call(UnityEngine.GameObject param0, UnityEngine.Vector2 param1)
+		{
+			func.BeginPCall();
+			func.PushSealed(param0);
+			func.Push(param1);
+			func.PCall();
+			func.EndPCall();
+		}
+
+		public void CallWithSelf(UnityEngine.GameObject param0, UnityEngine.Vector2 param1)
+		{
+			func.BeginPCall();
+			func.Push(self);
+			func.PushSealed(param0);
+			func.Push(param1);
+			func.PCall();
+			func.EndPCall();
+		}
+	}
+
+	public UIEventListener.VectorDelegate UIEventListener_VectorDelegate(LuaFunction func, LuaTable self, bool flag)
+	{
+		if (func == null)
+		{
+			UIEventListener.VectorDelegate fn = delegate(UnityEngine.GameObject param0, UnityEngine.Vector2 param1) { };
+			return fn;
+		}
+
+		if(!flag)
+		{
+			UIEventListener_VectorDelegate_Event target = new UIEventListener_VectorDelegate_Event(func);
+			UIEventListener.VectorDelegate d = target.Call;
+			target.method = d.Method;
+			return d;
+		}
+		else
+		{
+			UIEventListener_VectorDelegate_Event target = new UIEventListener_VectorDelegate_Event(func, self);
+			UIEventListener.VectorDelegate d = target.CallWithSelf;
+			target.method = d.Method;
+			return d;
+		}
+	}
+
+	bool Check_UIEventListener_VectorDelegate(IntPtr L, int pos)
+	{
+		return TypeChecker.CheckDelegateType(typeof(UIEventListener.VectorDelegate), L, pos);
+	}
+
+	void Push_UIEventListener_VectorDelegate(IntPtr L, UIEventListener.VectorDelegate o)
+	{
+		ToLua.Push(L, o);
+	}
+
+	class UIEventListener_ObjectDelegate_Event : LuaDelegate
+	{
+		public UIEventListener_ObjectDelegate_Event(LuaFunction func) : base(func) { }
+		public UIEventListener_ObjectDelegate_Event(LuaFunction func, LuaTable self) : base(func, self) { }
+
+		public void Call(UnityEngine.GameObject param0, UnityEngine.GameObject param1)
+		{
+			func.BeginPCall();
+			func.PushSealed(param0);
+			func.PushSealed(param1);
+			func.PCall();
+			func.EndPCall();
+		}
+
+		public void CallWithSelf(UnityEngine.GameObject param0, UnityEngine.GameObject param1)
+		{
+			func.BeginPCall();
+			func.Push(self);
+			func.PushSealed(param0);
+			func.PushSealed(param1);
+			func.PCall();
+			func.EndPCall();
+		}
+	}
+
+	public UIEventListener.ObjectDelegate UIEventListener_ObjectDelegate(LuaFunction func, LuaTable self, bool flag)
+	{
+		if (func == null)
+		{
+			UIEventListener.ObjectDelegate fn = delegate(UnityEngine.GameObject param0, UnityEngine.GameObject param1) { };
+			return fn;
+		}
+
+		if(!flag)
+		{
+			UIEventListener_ObjectDelegate_Event target = new UIEventListener_ObjectDelegate_Event(func);
+			UIEventListener.ObjectDelegate d = target.Call;
+			target.method = d.Method;
+			return d;
+		}
+		else
+		{
+			UIEventListener_ObjectDelegate_Event target = new UIEventListener_ObjectDelegate_Event(func, self);
+			UIEventListener.ObjectDelegate d = target.CallWithSelf;
+			target.method = d.Method;
+			return d;
+		}
+	}
+
+	bool Check_UIEventListener_ObjectDelegate(IntPtr L, int pos)
+	{
+		return TypeChecker.CheckDelegateType(typeof(UIEventListener.ObjectDelegate), L, pos);
+	}
+
+	void Push_UIEventListener_ObjectDelegate(IntPtr L, UIEventListener.ObjectDelegate o)
+	{
+		ToLua.Push(L, o);
+	}
+
+	class UIEventListener_KeyCodeDelegate_Event : LuaDelegate
+	{
+		public UIEventListener_KeyCodeDelegate_Event(LuaFunction func) : base(func) { }
+		public UIEventListener_KeyCodeDelegate_Event(LuaFunction func, LuaTable self) : base(func, self) { }
+
+		public void Call(UnityEngine.GameObject param0, UnityEngine.KeyCode param1)
+		{
+			func.BeginPCall();
+			func.PushSealed(param0);
+			func.Push(param1);
+			func.PCall();
+			func.EndPCall();
+		}
+
+		public void CallWithSelf(UnityEngine.GameObject param0, UnityEngine.KeyCode param1)
+		{
+			func.BeginPCall();
+			func.Push(self);
+			func.PushSealed(param0);
+			func.Push(param1);
+			func.PCall();
+			func.EndPCall();
+		}
+	}
+
+	public UIEventListener.KeyCodeDelegate UIEventListener_KeyCodeDelegate(LuaFunction func, LuaTable self, bool flag)
+	{
+		if (func == null)
+		{
+			UIEventListener.KeyCodeDelegate fn = delegate(UnityEngine.GameObject param0, UnityEngine.KeyCode param1) { };
+			return fn;
+		}
+
+		if(!flag)
+		{
+			UIEventListener_KeyCodeDelegate_Event target = new UIEventListener_KeyCodeDelegate_Event(func);
+			UIEventListener.KeyCodeDelegate d = target.Call;
+			target.method = d.Method;
+			return d;
+		}
+		else
+		{
+			UIEventListener_KeyCodeDelegate_Event target = new UIEventListener_KeyCodeDelegate_Event(func, self);
+			UIEventListener.KeyCodeDelegate d = target.CallWithSelf;
+			target.method = d.Method;
+			return d;
+		}
+	}
+
+	bool Check_UIEventListener_KeyCodeDelegate(IntPtr L, int pos)
+	{
+		return TypeChecker.CheckDelegateType(typeof(UIEventListener.KeyCodeDelegate), L, pos);
+	}
+
+	void Push_UIEventListener_KeyCodeDelegate(IntPtr L, UIEventListener.KeyCodeDelegate o)
+	{
+		ToLua.Push(L, o);
+	}
+
+	class RequestLoadBundle_OnCreateAssetBundle_Event : LuaDelegate
+	{
+		public RequestLoadBundle_OnCreateAssetBundle_Event(LuaFunction func) : base(func) { }
+		public RequestLoadBundle_OnCreateAssetBundle_Event(LuaFunction func, LuaTable self) : base(func, self) { }
+
+		public void Call(string param0, UnityEngine.AssetBundle param1, int param2)
+		{
+			func.BeginPCall();
+			func.Push(param0);
+			func.PushSealed(param1);
+			func.Push(param2);
+			func.PCall();
+			func.EndPCall();
+		}
+
+		public void CallWithSelf(string param0, UnityEngine.AssetBundle param1, int param2)
+		{
+			func.BeginPCall();
+			func.Push(self);
+			func.Push(param0);
+			func.PushSealed(param1);
+			func.Push(param2);
+			func.PCall();
+			func.EndPCall();
+		}
+	}
+
+	public RequestLoadBundle.OnCreateAssetBundle RequestLoadBundle_OnCreateAssetBundle(LuaFunction func, LuaTable self, bool flag)
+	{
+		if (func == null)
+		{
+			RequestLoadBundle.OnCreateAssetBundle fn = delegate(string param0, UnityEngine.AssetBundle param1, int param2) { };
+			return fn;
+		}
+
+		if(!flag)
+		{
+			RequestLoadBundle_OnCreateAssetBundle_Event target = new RequestLoadBundle_OnCreateAssetBundle_Event(func);
+			RequestLoadBundle.OnCreateAssetBundle d = target.Call;
+			target.method = d.Method;
+			return d;
+		}
+		else
+		{
+			RequestLoadBundle_OnCreateAssetBundle_Event target = new RequestLoadBundle_OnCreateAssetBundle_Event(func, self);
+			RequestLoadBundle.OnCreateAssetBundle d = target.CallWithSelf;
+			target.method = d.Method;
+			return d;
+		}
+	}
+
+	bool Check_RequestLoadBundle_OnCreateAssetBundle(IntPtr L, int pos)
+	{
+		return TypeChecker.CheckDelegateType(typeof(RequestLoadBundle.OnCreateAssetBundle), L, pos);
+	}
+
+	void Push_RequestLoadBundle_OnCreateAssetBundle(IntPtr L, RequestLoadBundle.OnCreateAssetBundle o)
+	{
+		ToLua.Push(L, o);
+	}
+
+	class RequestLoadAsset_OnLoadAsset_Event : LuaDelegate
+	{
+		public RequestLoadAsset_OnLoadAsset_Event(LuaFunction func) : base(func) { }
+		public RequestLoadAsset_OnLoadAsset_Event(LuaFunction func, LuaTable self) : base(func, self) { }
+
+		public void Call(UnityEngine.Object param0, int param1)
+		{
+			func.BeginPCall();
+			func.Push(param0);
+			func.Push(param1);
+			func.PCall();
+			func.EndPCall();
+		}
+
+		public void CallWithSelf(UnityEngine.Object param0, int param1)
+		{
+			func.BeginPCall();
+			func.Push(self);
+			func.Push(param0);
+			func.Push(param1);
+			func.PCall();
+			func.EndPCall();
+		}
+	}
+
+	public RequestLoadAsset.OnLoadAsset RequestLoadAsset_OnLoadAsset(LuaFunction func, LuaTable self, bool flag)
+	{
+		if (func == null)
+		{
+			RequestLoadAsset.OnLoadAsset fn = delegate(UnityEngine.Object param0, int param1) { };
+			return fn;
+		}
+
+		if(!flag)
+		{
+			RequestLoadAsset_OnLoadAsset_Event target = new RequestLoadAsset_OnLoadAsset_Event(func);
+			RequestLoadAsset.OnLoadAsset d = target.Call;
+			target.method = d.Method;
+			return d;
+		}
+		else
+		{
+			RequestLoadAsset_OnLoadAsset_Event target = new RequestLoadAsset_OnLoadAsset_Event(func, self);
+			RequestLoadAsset.OnLoadAsset d = target.CallWithSelf;
+			target.method = d.Method;
+			return d;
+		}
+	}
+
+	bool Check_RequestLoadAsset_OnLoadAsset(IntPtr L, int pos)
+	{
+		return TypeChecker.CheckDelegateType(typeof(RequestLoadAsset.OnLoadAsset), L, pos);
+	}
+
+	void Push_RequestLoadAsset_OnLoadAsset(IntPtr L, RequestLoadAsset.OnLoadAsset o)
+	{
+		ToLua.Push(L, o);
+	}
+
+	class GameObjectPool_OnCreateGameObject_Event : LuaDelegate
+	{
+		public GameObjectPool_OnCreateGameObject_Event(LuaFunction func) : base(func) { }
+		public GameObjectPool_OnCreateGameObject_Event(LuaFunction func, LuaTable self) : base(func, self) { }
+
+		public void Call(int param0, int param1)
+		{
+			func.BeginPCall();
+			func.Push(param0);
+			func.Push(param1);
+			func.PCall();
+			func.EndPCall();
+		}
+
+		public void CallWithSelf(int param0, int param1)
+		{
+			func.BeginPCall();
+			func.Push(self);
+			func.Push(param0);
+			func.Push(param1);
+			func.PCall();
+			func.EndPCall();
+		}
+	}
+
+	public GameObjectPool.OnCreateGameObject GameObjectPool_OnCreateGameObject(LuaFunction func, LuaTable self, bool flag)
+	{
+		if (func == null)
+		{
+			GameObjectPool.OnCreateGameObject fn = delegate(int param0, int param1) { };
+			return fn;
+		}
+
+		if(!flag)
+		{
+			GameObjectPool_OnCreateGameObject_Event target = new GameObjectPool_OnCreateGameObject_Event(func);
+			GameObjectPool.OnCreateGameObject d = target.Call;
+			target.method = d.Method;
+			return d;
+		}
+		else
+		{
+			GameObjectPool_OnCreateGameObject_Event target = new GameObjectPool_OnCreateGameObject_Event(func, self);
+			GameObjectPool.OnCreateGameObject d = target.CallWithSelf;
+			target.method = d.Method;
+			return d;
+		}
+	}
+
+	bool Check_GameObjectPool_OnCreateGameObject(IntPtr L, int pos)
+	{
+		return TypeChecker.CheckDelegateType(typeof(GameObjectPool.OnCreateGameObject), L, pos);
+	}
+
+	void Push_GameObjectPool_OnCreateGameObject(IntPtr L, GameObjectPool.OnCreateGameObject o)
 	{
 		ToLua.Push(L, o);
 	}

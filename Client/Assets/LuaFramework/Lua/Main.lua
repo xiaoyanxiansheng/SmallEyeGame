@@ -3,9 +3,9 @@ function Main()
 	-- 如果不增加路径支持我们就等全路径访问才行
 	-- require "F:/work/unity/SmallEyeGame/Data/ULua/System/GameMain";
 
-	-- 增加路径支持 这个路径就是我们以后的lua脚本的根路径
-	package.path = package.path..";F:/work/unity/SmallEyeGame/?.lua"
-	require "Data/ULua/System/GameMain";
+	-- TODO 增加路径支持 这个路径就是我们以后的lua脚本的根路径
+	package.path = package.path..";D:/unity/SmallEyeGame/?.lua"
+	require "Data/ULua/System/CommonRequire";
 end
 
 --场景切换通知

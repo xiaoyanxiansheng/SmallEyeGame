@@ -6,7 +6,7 @@ using LuaFramework;
 public class StartUpCommand : ControllerCommand {
 
     public override void Execute(IMessage message) {
-        if (!Util.CheckEnvironment()) return;
+        // if (!Util.CheckEnvironment()) return;
 
         GameObject gameMgr = GameObject.Find("GlobalGenerator");
         if (gameMgr != null) {
@@ -16,6 +16,9 @@ public class StartUpCommand : ControllerCommand {
         AppFacade.Instance.RegisterCommand(NotiConst.DISPATCH_MESSAGE, typeof(SocketCommand));
 
         //-----------------初始化管理器-----------------------
+        // 增加资源管理模块
+        AppFacade.Instance.AddManager<ResourceUtil>(ManagerName.ResourceUtil);
+
         AppFacade.Instance.AddManager<LuaManager>(ManagerName.Lua);
         //AppFacade.Instance.AddManager<PanelManager>(ManagerName.Panel);
         //AppFacade.Instance.AddManager<SoundManager>(ManagerName.Sound);

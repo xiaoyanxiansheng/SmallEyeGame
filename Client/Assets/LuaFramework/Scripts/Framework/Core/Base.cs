@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class Base : MonoBehaviour {
     private AppFacade m_Facade;
     private LuaManager m_LuaMgr;
-    private ResourceManager m_ResMgr;
+    private LuaFramework.ResourceManager m_ResMgr;
     private NetworkManager m_NetMgr;
     private SoundManager m_SoundMgr;
     private TimerManager m_TimerMgr;
@@ -54,7 +54,7 @@ public class Base : MonoBehaviour {
     protected ResourceManager ResManager {
         get {
             if (m_ResMgr == null) {
-                m_ResMgr = facade.GetManager<ResourceManager>(ManagerName.Resource);
+                m_ResMgr = facade.GetManager<LuaFramework.ResourceManager>(ManagerName.Resource);
             }
             return m_ResMgr;
         }

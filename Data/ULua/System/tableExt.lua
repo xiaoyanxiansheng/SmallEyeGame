@@ -46,3 +46,29 @@ function table.AddTable(t1,t2)
         end
     end
 end
+
+-- table中删除一个Value
+function table.Remove(t,value,isArray)
+    if not t or not v then 
+        return;
+    end
+    for k,v in pairs(t) do
+        if v == value then 
+            if isArray then 
+                table.remove(k);
+            else
+                t[k] = nil;
+            end
+            break;
+        end
+    end
+end
+
+-- table中加入值 如果以前有就先删除 然后加入
+function table.InsertOnlyValue(t,value)
+    if not t or not value then 
+        return;
+    end
+    table.Remove(t,value,true);
+    table.inert(t,value);
+end

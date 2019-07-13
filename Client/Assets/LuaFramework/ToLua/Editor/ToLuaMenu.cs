@@ -312,7 +312,7 @@ public static class ToLuaMenu
             for (int j = i + 1; j < list.Length; j++)
             {
                 if (list[i].type == list[j].type)
-                    throw new NotSupportedException("Repeat BindType:" + list[i].type);
+                     throw new NotSupportedException("Repeat BindType:" + list[i].type);
             }
 
             if (dropType.IndexOf(list[i].type) >= 0)
