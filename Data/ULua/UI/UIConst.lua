@@ -1,18 +1,37 @@
 UIConst = {
-	-- 例子
-	-- UI的name
-	ViewName = {
-		-- prefab路径
-		"PrefabPath",
-		-- 脚本路径
-		"ScriptePath"
-	},
+	UIPanel_Test = "UIPanel_Test",
+};
 
+UIPath = {
+	-- UI的name
 	UIPanel_Test = {
+		-- prefab路径
 		"ui/prefab/uipanel_test",
+		-- 脚本路径
 		"Data/ULua/UI/UIScript/UIPanel_Test",
 	},
-};
+}
+
+function GetPrefabPath(name)
+	local name = UIConst[name];
+	if name then 
+		local info = UIPath[name];
+		if info then 
+			return info[1];
+		end
+	end
+	return nil;
+end
+function GetUIScriptPath(name)
+local name = UIConst[name];
+	if name then 
+		local info = UIPath[name];
+		if info then 
+			return info[2];
+		end
+	end
+	return nil;
+end
 
 --[[ 
 	TODO 后期优化到表格中去 因为UI的配置会有很多

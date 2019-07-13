@@ -43,7 +43,7 @@ function _M:Init(initFinishCall)
 	-- 开始加载
 	self.uiInitFinishCall = initFinishCall;
 	self:ShowFullScreenMask();
-	self.uiInitRequestId = CreateUIPanelAsync(self:GetPrefabPath(),self.OnCreateInstance);
+	self.uiInitRequestId = CreateUIPanelAsync(GetPrefabPath(self.name),self.OnCreateInstance);
 end
 
 function _M:OnCreateInstance(intanceId)
@@ -300,12 +300,6 @@ function _M:IsShow()
 end
 
 -- region
-function _M:GetScriptPath()
-	return UIConst[self.name][1];
-end
-function _M:GetPrefabPath()
-	return UIConst[self.name][2];
-end
 function _M:GetName()
 	return self.name;
 end

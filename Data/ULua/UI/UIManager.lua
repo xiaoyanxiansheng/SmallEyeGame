@@ -19,7 +19,8 @@ local _M = UIManager;
 function _M:Init(params,initFinishCall,...)
 	-- 1 获取UI控制脚本
 	local viewScripts = {}
-	for i,v in ipairs({...}) do
+	local viewNames = {...};
+	for i,v in ipairs(viewNames) do
 		table.insert(viewScripts,self:GetControlScript(v));
 	end
 
@@ -105,9 +106,9 @@ end
 -- 控制UI的行为: 加载 打开 关闭 卸载
 function _M:GetControlScript(viewName)
 	if not self.uiViewScripts[viewScript] then 
-		local viewScriptPath = UIconst[viewName];
-		if viewScriptPath then 
-			require viewScriptPath;
+		local scriptPath = GetUIScriptPath(viewName);
+		if scriptPath then 
+			require(scriptPath);
 		else
 			print("GetControlScript error " .. viewName);
 		end
