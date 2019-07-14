@@ -192,6 +192,11 @@ public class RequestLoadBundle{
     }
     private static void RecoveryLoadBundleInfo(LoadBundleInfo loadBundleInfo)
     {
+        if (loadBundleInfo == null) return;
+
+        if (_loadBundleInfoList.ContainsKey(loadBundleInfo.bundleName))
+            _loadBundleInfoList.Remove(loadBundleInfo.bundleName);
+
         loadBundleInfo.Clear();
         _freeLoadBundleInfoList.Add(loadBundleInfo);
     }

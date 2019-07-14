@@ -44,6 +44,8 @@ public class GameObjectPool {
             ReferenceObject.ReleaseObject(gameObjectRef.assetName);
         }
         Debug.Log("gameObejct Destory " + gameObjectRef.assetName);
+        if (_gameObjectRef.ContainsKey(gameObjectRef.instanceId))
+            _gameObjectRef.Remove(gameObjectRef.instanceId);
         gameObjectRef.Clear();
         _freeGameObjectRef.Add(gameObjectRef);
     }
@@ -59,8 +61,9 @@ public class GameObjectPool {
 
         Debug.Log("gameObject create " + assetName);
 
-        // TODO 根据具体的需求实例化实体
         GameObject obj = (GameObject)GameObject.Instantiate(asset,Vector3.zero,Quaternion.identity);
+        obj = InitGameObject(type, obj, assetName);
+        obj.SetActive(false);
         int instanceId = obj.GetInstanceID();
 
         GameObjectRef gameObjectRef = GetTempGameObjectRef();
@@ -69,32 +72,38 @@ public class GameObjectPool {
         gameObjectRef.obj = obj;
         _gameObjectRef.Add(instanceId, gameObjectRef);
 
-        InitGameObject(type,gameObjectRef);
-
         return instanceId;
     }
 
-    public static void InitGameObject(int type, GameObjectRef gameObjectRef)
+    public static GameObject InitGameObject(int type, GameObject obj, string assetName)
     {
         Transform parent = null;
         Transform son = null;
         // GameObject
         if (type == 1)
         {
-            gameObjectRef.obj.name = gameObjectRef.assetName;
+            son = obj.transform;
         }
         // UI
         else if(type == 2)
         {
-            GameObject root = GameObject.Find("uipanel_base");
+            GameObject root = GameObject.Find("ui/prefab/uipanel_base");
             parent = root.transform;
-            son = gameObjectRef.obj.transform.FindChild("Core");
+            son = obj.transform.FindChild("Core");
+            // GameObject.Destroy(obj);
         }
 
-        if (son!= null && parent != null)
+        if (son != null)
         {
-            son.parent = parent;
+            son.name = assetName;
+            if (parent != null)
+            {
+                son.parent = parent;
+            }
+            CommonUtil.TrimGameObejct(son.gameObject);
         }
+
+        return son.gameObject;
     }
 
     public static void DestoryGameObject(int instanceId)

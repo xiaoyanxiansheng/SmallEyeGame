@@ -169,6 +169,18 @@ public class RequestLoadAsset{
     /// <param name="assetInfo">asset加载信息</param>
     private static void RecoveryLoadAssetInfo(LoadAssetInfo info)
     {
+        if (info == null) return;
+
+
+        foreach(LoadAssetInfo loadAssetInfo in _loadAssetInfoList)
+        {
+            if (loadAssetInfo == info)
+            {
+                _loadAssetInfoList.Remove(loadAssetInfo);
+                break;
+            }
+        }
+
         info.Clear();
         _freeLoadAssetInfoList.Add(info);
     }
@@ -199,6 +211,10 @@ public class RequestLoadAsset{
     private static void RecoveryPendingLoadAssetInfo(PendingLoadAssetInfo info)
     {
         if (info == null) return;
+
+        if (_pendingLoadAssetInfoList.ContainsKey(info.bundleName))
+            _pendingLoadAssetInfoList.Remove(info.bundleName);
+
         info.Clear();
         _freePendingLoadAssetInfoList.Add(info);
     }
