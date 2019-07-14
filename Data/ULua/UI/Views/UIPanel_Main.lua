@@ -28,25 +28,39 @@ function _M:OnDestory()
     print("UIPanel_Main OnDestory");
 end
 
-function _M:ClickItem(sender)
+function _M:ClickOpenTest(sender)
     local index = tonumber(sender.transform.name);
     if index == 1 then
         -- 加载测试
-        UIManager:Init(nil,nil,UIConst.UIPanel_Test)
+        UIManager:Init(nil,nil,UIConst.UIPanel_Father)
     elseif index == 2 then
         -- 打开测试
-        UIManager:Open(nil,UIConst.UIPanel_Test);
+        UIManager:Open(nil,UIConst.UIPanel_Father);
     elseif index == 3 then
         -- 加载打开测试
-        UIManager:Open(nil,UIConst.UIPanel_Test);
+        UIManager:Open(nil,UIConst.UIPanel_Father);
     elseif index == 4 then
         -- 关闭测试
-        UIManager:Close(UIConst.UIPanel_Test);
+        UIManager:Close(UIConst.UIPanel_Father);
     elseif index == 5 then
         -- 卸载测试
-        UIManager:Close(UIConst.UIPanel_Test,true);
+        UIManager:Close(UIConst.UIPanel_Father,true);
     elseif index == 6 then
         -- 关闭卸载测试
-        UIManager:Close(UIConst.UIPanel_Test,true);
+        UIManager:Close(UIConst.UIPanel_Father,true);
     end
+end
+
+function _M:ClickOpenSingle()
+    -- 打开单个UI
+    UIManager:Open(nil,UIConst.UIPanel_Father);
+end
+
+function _M:ClickOpenFamily()
+    -- 打开多个UI
+    UIManager:Open(nil,UIConst.UIPanel_Father,UIConst.UIPanel_FatherSon1,UIConst.UIPanel_FatherSon2);
+end
+function _M:ClickOpenIgnore()
+    -- 打开一个上层UI 并且不受UI流程控制
+    UIManager:Open(nil,UIConst.UIPanel_MessageBox);
 end

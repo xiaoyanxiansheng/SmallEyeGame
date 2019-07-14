@@ -19,14 +19,15 @@ local _M = UILayer;
 -- 计算出一个可用层级 
 -- 在当前最高层级的基础上加1
 function _M:CalculateLayer(view)
+	local name = view:GetName();
+
 	-- 上层UI层级
-	local topLayerIndex = view:GetTopLayerIndex();
-	if topLayerIndex > 0 then 
-		return self.topLayer[topLayerIndex]
+	local layer = self:GetTopLayer(name);
+	if layer > 0 then
+		return layer;
 	end
 
 	-- 普通UI层级
-	local name = view:GetName();
 	self.commonLayers[name] = nil;
 	local maxLayer = 0;
 	for k,v in pairs(self.commonLayers) do
@@ -42,21 +43,29 @@ end
 function _M:DelLayer(view)
 	local name = view:GetName();
 
-	local layer = 0;
+	-- 上层UI层级
+	local layer = self:GetTopLayer(name);
+	if layer > 0 then
+		return layer;
+	end
 
+	-- 普通UI层级
 	if self.commonLayers[name] then 
-		layer = self.commonLayers;
+		layer = self.commonLayers[name];
 		self.commonLayers[name] = nil;
 	end
 
 	return layer;
 end
 
--- 获得层级
-function _M:GetLayer(name)
-	local layer = 0;
-	if self.commonLayers and self.commonLayers[name] then
-		layer = self.commonLayers[name];
+-- 上层UI层级
+function _M:GetTopLayer(name)
+	local topLayerIndex = 0;
+	if UISetting[name] and UISetting[name]["topLayer"] then
+		topLayerIndex = UISetting[name]["topLayer"];
 	end
-	return layer;
+	if topLayerIndex > 0 then
+		return self.topLayers[topLayerIndex]
+	end
+	return 0;
 end

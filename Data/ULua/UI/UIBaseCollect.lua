@@ -7,7 +7,7 @@ UIBaseCollect = Class("UIBaseCollect");
 
 local _M = UIBaseCollect;
 
--- region 对外接口
+-- region 流程接口
 -- 加载UI集合
 function _M:Init(params,initFinishCall,views)
 	if not self:CheckViews(views) then
@@ -56,12 +56,26 @@ function _M:Show(isBack)
 end
 
 -- 关闭UI集合
-function _M:CloseAll(closeFinishCall,isDestory)
+function _M:CloseAll(closeFinishCall,isDestory,isBack)
 	-- 卸载流程处理所有UI，关闭流程只需要处理已打开的
 	local views = isDestory and self.initViews or self.openedViews;
 	if not views or #views == 0 then
 		return;
 	end
+
+	-- 保存返回列表
+	local openingViews = nil;
+	if isBack then
+		if self.openedViews then
+			for i, v in ipairs(self.openedViews) do
+				if not openingViews then
+					openingViews = {};
+				end
+				table.insert(openingViews,v);
+			end
+		end
+	end
+
 	-- 从后往前关闭UI
 	local UICount = #views;
 	for i=1,UICount do
@@ -70,6 +84,13 @@ function _M:CloseAll(closeFinishCall,isDestory)
 		-- 这里需要注意 只有主UI才有权利完成之后返回
 		local tempCloseFinishCall = view:IsMainUI() and closeFinishCall or nil;
 		self:Close(view,tempCloseFinishCall,isDestory);
+	end
+
+	-- 加入保存列表 等待返回流程的时候打开
+	if isBack then
+		if openingViews then
+			self:AddOpeningViews(openingViews,true);
+		end
 	end
 end
 
@@ -84,7 +105,7 @@ function _M:Close(viewScript,closeFinishCall,isDestory)
 end
 -- endregion
 
--- region 对内接口
+-- region 帮助函数
 function _M:ctor()
 	-- 打开页面参数
 	self.params = nil;
@@ -97,11 +118,11 @@ function _M:ctor()
 end
 
 function _M:AddInitView(views,isReset)
-	if not self.initViews then
+	if isReset then
 		self.initViews = {};
 	end
-	if isReset then
-		table.Clear(self.initViews);
+	if not self.initViews then
+		self.initViews = {};
 	end
     table.AddTable(self.initViews,views);
 end
@@ -109,11 +130,11 @@ function _M:RemoveInitView(view)
 	return table.Remove(self.initViews,view,true);
 end
 function _M:AddOpeningViews(views,isReset)
-	if not self.openingViews then
+	if isReset then
 		self.openingViews = {};
 	end
-	if isReset then
-		table.Clear(self.openingViews);
+	if not self.openingViews then
+		self.openingViews = {};
 	end
 	table.AddTable(self.openingViews,views);
 end
@@ -121,11 +142,11 @@ function _M:RemoveOpeningView(view)
 	return table.Remove(self.openingViews,view,true);
 end
 function _M:AddOpenedViews(views,isReset)
-	if not self.openedViews then
+	if isReset then
 		self.openedViews = {};
 	end
-	if isReset then
-		table.Clear(self.openedViews);
+	if not self.openedViews then
+		self.openedViews = {};
 	end
 	table.AddTable(self.openedViews,views);
 end
@@ -173,5 +194,12 @@ function _M:CheckViews(views)
 	end
 
 	return true;
+end
+-- 集合类型：使用主UI类型判断
+function _M:IsMainCollect()
+	return self:GetMain():IsMainUI();
+end
+function _M:IsIgnoewMainCollect()
+	return self:GetMain():IsIgnoewMainUI();
 end
 -- endregion

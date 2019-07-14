@@ -2,7 +2,7 @@
 	UI分类
 		1 主UI(自动流程)：每个UI集合必须有一个，打开UI集合前需要关闭当前UI集合，这时只需要处理打开逻辑就行；关闭当前UI集合后需要打开上次关闭的UI集合，这时只需要处理关闭逻辑就行。
 		2 主UI(手动流程)：每个UI集合必须有一个，不受自动打开和关闭的影响。比如一些弹出框。
-		3 子UI：和主UI一起构成UI集合
+		0 子UI：和主UI一起构成UI集合
 --]]
 ---@class UIBaseView
 UIBaseView = Class("UIBaseView");
@@ -12,7 +12,6 @@ local _M = UIBaseView;
 function _M:ctor(name)
 	self.name = name;
 
-	self.topLayerIndex = 0;			-- 上层UI设置：设置之后会一直显示在UI的最上层
 	self.params = nil;				-- 页面打开后的参数
 	-- 加载流程
 	self.uiInitRequestId = 0;		-- 异步请求ID
@@ -288,7 +287,7 @@ function _M:DelUILayer()
 		print("SetUILayer is error " , self.name);
 		return;
 	end
-	local layer = UILayer:GetLayer(self);
+	local layer = UILayer:DelLayer(self);
 	self:AddUILayerHelper(-layer);
 end
 function _M:AddUILayerHelper(layer)
@@ -334,10 +333,10 @@ end
 function _M:IsSonUI()
 	if UISetting[self.name] 
 		and UISetting[self.name].uiType 
-		and UISetting[self.name].uiType == 3 then 
-		return true;
+		and UISetting[self.name].uiType ~= 0 then
+		return false;
 	end
-	return false;
+	return true;
 end
 
 -- 加载中
@@ -356,8 +355,5 @@ end
 -- region
 function _M:GetName()
 	return self.name;
-end
-function _M:GetTopLayerIndex()
-	return self.topLayerIndex;
 end
 -- endregion

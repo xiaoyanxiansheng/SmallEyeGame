@@ -49,7 +49,7 @@ end
 
 -- table中删除一个Value
 function table.Remove(t,value,isArray)
-    if not t or not v then 
+    if not t or not value then
         return;
     end
     for k,v in pairs(t) do
