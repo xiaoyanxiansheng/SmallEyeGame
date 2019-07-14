@@ -1,15 +1,21 @@
+---@class UIConst
 UIConst = {
 	UIPanel_Test = "UIPanel_Test",
+	UIPanel_Main = "UIPanel_Main",
 };
 
 UIPath = {
 	-- UI的name
 	UIPanel_Test = {
-		-- prefab路径
+		-- prefab路径 TODO 通过代码转成小写
 		"ui/prefab/uipanel_test",
 		-- 脚本路径
-		"Data/ULua/UI/UIScript/UIPanel_Test",
+		"Data/ULua/UI/Views/UIPanel_Test",
 	},
+	UIPanel_Main = {
+		"ui/prefab/uipanel_main",
+		"Data/ULua/UI/Views/UIPanel_Main",
+	}
 }
 
 function GetPrefabPath(name)
@@ -42,7 +48,10 @@ end
 		UI是否忽略另外一些UI的打开：比如当前界面是否忽略邀请，忽略提示信息等等
 --]]
 UISetting = {
-	ViewName = {
+	UIPanel_Main = {
 		uiType = 1--2,3
 	},
+	UIPanel_Test = {
+		uiType = 1--2,3
+	}
 }

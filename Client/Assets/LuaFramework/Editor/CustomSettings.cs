@@ -66,6 +66,7 @@ public static class CustomSettings
         _GT(typeof(UIEventListener)),
         _GT(typeof(CommonUtil)),
         _GT(typeof(ResourceUtil)),
+        _GT(typeof(UICore)),
         
 
 #if USING_DOTWEENING

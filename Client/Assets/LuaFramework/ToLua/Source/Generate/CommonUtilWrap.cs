@@ -8,6 +8,7 @@ public class CommonUtilWrap
 	{
 		L.BeginClass(typeof(CommonUtil), typeof(System.Object));
 		L.RegFunction("GetUIPanels", GetUIPanels);
+		L.RegFunction("TrimGameObejct", TrimGameObejct);
 		L.RegFunction("New", _CreateCommonUtil);
 		L.RegFunction("__tostring", ToLua.op_ToString);
 		L.EndClass();
@@ -47,6 +48,22 @@ public class CommonUtilWrap
 			UIPanel[] o = CommonUtil.GetUIPanels(arg0);
 			ToLua.Push(L, o);
 			return 1;
+		}
+		catch (Exception e)
+		{
+			return LuaDLL.toluaL_exception(L, e);
+		}
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int TrimGameObejct(IntPtr L)
+	{
+		try
+		{
+			ToLua.CheckArgsCount(L, 1);
+			UnityEngine.GameObject arg0 = (UnityEngine.GameObject)ToLua.CheckObject(L, 1, typeof(UnityEngine.GameObject));
+			CommonUtil.TrimGameObejct(arg0);
+			return 0;
 		}
 		catch (Exception e)
 		{

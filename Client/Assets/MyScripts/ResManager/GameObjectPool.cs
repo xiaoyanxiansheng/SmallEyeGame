@@ -90,7 +90,7 @@ public class GameObjectPool {
             GameObject root = GameObject.Find("ui/prefab/uipanel_base");
             parent = root.transform;
             son = obj.transform.FindChild("Core");
-            // GameObject.Destroy(obj);
+            GameObject.Destroy(obj);
         }
 
         if (son != null)

@@ -36,11 +36,11 @@ end
 -- table中加入一个table
 function table.AddTable(t1,t2)
     if not t1 or not t2 then 
-        return t1;
+        return;
     end
 
     for k,v in pairs(t2) do
-        local inIndex = table.ContainValue(t1,v,k);
+        local inIndex = table.ContainValue(t1,v);
         if inIndex == 0 then 
             table.insert(t1,v);
         end
@@ -55,7 +55,7 @@ function table.Remove(t,value,isArray)
     for k,v in pairs(t) do
         if v == value then 
             if isArray then 
-                table.remove(k);
+                table.remove(t,k);
             else
                 t[k] = nil;
             end

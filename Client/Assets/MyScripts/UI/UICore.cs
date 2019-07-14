@@ -96,7 +96,7 @@ public class UICore : MonoBehaviour {
             BindingWidget(t,cacheParam[i]);
         }
     }
-    public void Clear()
+    public void UnInit()
     {
 
     }

@@ -26,7 +26,7 @@ function _M:Init(params,initFinishCall,...)
 
 	-- 2 获取UI集合
 	local viewCollect = self:GetViewCollect(viewScripts);
-	if not viewCollect or #viewCollect == 0 then 
+	if not viewCollect then
 		print("UIManager Init error");
 		return;
 	end
@@ -46,7 +46,7 @@ function _M:Open(params,...)
 	-- 加载
 	self:Init(params,function(viewCollect)
 		local topViewCollect = self.openViewCollects[#self.openViewCollects];
-		if topViewCollect:IsShow() and topViewCollect ~= viewCollect then
+		if topViewCollect and topViewCollect:IsShow() and topViewCollect ~= viewCollect then
 			-- 先关闭当前UI集合 然后在打开下一个UI集合
 			self:CloseViewCollect(topViewCollect,function()
 					self:OpenViewcCollect(viewCollect);
@@ -64,12 +64,12 @@ end
 -- 2 当前UI不是主UI 直接关闭
 function _M:Close(viewName,isDestory)
 	local viewScript = self:GetControlScript(viewName);
-	if viewScript:IsMainUI() then 
-		local viewCollect = self:GetViewCollect(viewScript);
-		if not viewCollect then 
-			print("Close error");
-			return;
-		end
+	local viewCollect = self:GetViewCollect(viewScript);
+	if not viewCollect then
+		print("Close error");
+		return;
+	end
+	if viewScript:IsMainUI() then
 		-- 先关闭UI集合 然后在打开上次关闭的UI集合
 		self:CloseViewCollect(viewCollect,function()
 				local topViewCollect = self.openViewCollects[#self.openViewCollects];
@@ -100,24 +100,24 @@ function _M:GetViewCollect(viewScript)
 			end
 		end
 	end
-	return nil;
+	return UIBaseCollect.New();
 end
 -- 获取控制脚本
 -- 控制UI的行为: 加载 打开 关闭 卸载
 function _M:GetControlScript(viewName)
-	if not self.uiViewScripts[viewScript] then 
+	if not self.uiViewScripts[viewName] then
 		local scriptPath = GetUIScriptPath(viewName);
-		if scriptPath then 
+		if scriptPath then
 			require(scriptPath);
 		else
 			print("GetControlScript error " .. viewName);
 		end
 	end
-	return self.uiViewScripts[viewScript];
+	return self.uiViewScripts[viewName];
 end
 -- 注册控制脚本
 function _M:SetControlScript(viewName,script)
-	if not self.uiViewScripts[viewName] then 
+	if not self.uiViewScripts[viewName] then
 		self.uiViewScripts[viewName] = script;
 	end
 end

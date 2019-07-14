@@ -2,17 +2,18 @@
 	UI收集器
 	作用：当我们需要同时打开多个页面的时候将其组成一个集合
 --]]
-UIBaseCollect = class("UIBaseCollect");
+---@class UIBaseCollect
+UIBaseCollect = Class("UIBaseCollect");
 
 local _M = UIBaseCollect;
 
-#region 对外接口
+-- region 对外接口
 -- 加载UI集合
 function _M:Init(params,initFinishCall,views)
-	if not self:CheckViews(views) then 
+	if not self:CheckViews(views) then
 		return;
 	end
-	
+
 	-- UI参数设置
 	self.params = params;
 	-- 加载列表
@@ -28,18 +29,19 @@ function _M:Init(params,initFinishCall,views)
 		local viewScript = views[i];
 		viewScript:SetParams(params);
 		viewScript:Init(function()
-				curInitCount = curInitCount + 1;
-				if curInitCount == totalInitCount then 
-					if initFinishCall then 
-						initFinishCall();
-					end
+			curInitCount = curInitCount + 1;
+			if curInitCount == totalInitCount then
+				if initFinishCall then
+					initFinishCall();
 				end
-			end);
+			end
+		end);
+	end
 end
 
 -- 打开UI集合
 function _M:Show(isBack)
-	if not self:CheckViews(self.openingViews) then 
+	if not self:CheckViews(self.openingViews) then
 		return;
 	end
 
@@ -55,14 +57,19 @@ end
 
 -- 关闭UI集合
 function _M:CloseAll(closeFinishCall,isDestory)
+	-- 卸载流程处理所有UI，关闭流程只需要处理已打开的
+	local views = isDestory and self.initViews or self.openedViews;
+	if not views or #views == 0 then
+		return;
+	end
 	-- 从后往前关闭UI
-	local UICount = #self.openedViews;
+	local UICount = #views;
 	for i=1,UICount do
-		local index = UICount - i + ;
+		local index = UICount - i + 1;
+		local view = views[index];
 		-- 这里需要注意 只有主UI才有权利完成之后返回
-		local view = self.openedViews[index];
 		local tempCloseFinishCall = view:IsMainUI() and closeFinishCall or nil;
-		self:Close(self.openedViews[index],tempCloseFinishCall,isDestory);
+		self:Close(view,tempCloseFinishCall,isDestory);
 	end
 end
 
@@ -70,14 +77,14 @@ end
 function _M:Close(viewScript,closeFinishCall,isDestory)
 	self:RemoveOpeningView(viewScript);
 	self:RemoveOpenedView(viewScript);
-	if isDestory then 
+	if isDestory then
 		self:RemoveInitView(viewScript);
 	end
-	viewScript:Close(closeFinishCall,isDestory);
+	viewScript:Close(isDestory,closeFinishCall);
 end
-#endregion
+-- endregion
 
-#region 对内接口
+-- region 对内接口
 function _M:ctor()
 	-- 打开页面参数
 	self.params = nil;
@@ -90,8 +97,8 @@ function _M:ctor()
 end
 
 function _M:AddInitView(views,isReset)
-	if self.initViews then 
-		self.initViews;
+	if not self.initViews then
+		self.initViews = {};
 	end
 	if isReset then
 		table.Clear(self.initViews);
@@ -102,7 +109,7 @@ function _M:RemoveInitView(view)
 	return table.Remove(self.initViews,view,true);
 end
 function _M:AddOpeningViews(views,isReset)
-	if self.openingViews then 
+	if not self.openingViews then
 		self.openingViews = {};
 	end
 	if isReset then
@@ -114,7 +121,7 @@ function _M:RemoveOpeningView(view)
 	return table.Remove(self.openingViews,view,true);
 end
 function _M:AddOpenedViews(views,isReset)
-	if not self.openedViews then 
+	if not self.openedViews then
 		self.openedViews = {};
 	end
 	if isReset then
@@ -131,7 +138,7 @@ end
 -- 将要打开的UI是否含有主UI
 function _M:IsContainMainUI()
 	for k,v in pairs(self.openingViews) do
-		if v:IsMainUI() then 
+		if v:IsMainUI() then
 			return true;
 		end
 	end
@@ -140,7 +147,7 @@ end
 -- 是否全部是子UI
 function _M:IsAllSonUI()
 	for k,v in pairs(self.openingViews) do
-		if not v:IsSonUI() then 
+		if not v:IsSonUI() then
 			return false;
 		end
 	end
@@ -156,15 +163,15 @@ function _M:GetMain()
 end
 -- 检查有效性
 function _M:CheckViews(views)
-	if not views then 
+	if not views then
 		print("views is nil");
 		return false;
 	end
-	if #views == 0 then 
+	if #views == 0 then
 		print("view is empty");
 		return false;
 	end
 
 	return true;
 end
-#endregion
+-- endregion

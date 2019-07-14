@@ -4,6 +4,7 @@
 		2 主UI(手动流程)：每个UI集合必须有一个，不受自动打开和关闭的影响。比如一些弹出框。
 		3 子UI：和主UI一起构成UI集合
 --]]
+---@class UIBaseView
 UIBaseView = Class("UIBaseView");
 
 local _M = UIBaseView;
@@ -11,18 +12,21 @@ local _M = UIBaseView;
 function _M:ctor(name)
 	self.name = name;
 
-	topLayerIndex = 0;			-- 上层UI设置：设置之后会一直显示在UI的最上层
-	params = nil;				-- 页面打开后的参数
+	self.topLayerIndex = 0;			-- 上层UI设置：设置之后会一直显示在UI的最上层
+	self.params = nil;				-- 页面打开后的参数
 	-- 加载流程
-	uiInitRequestId = 0;		-- 异步请求ID
-	uiInitFinishCall = nil;		-- 请求加载完成后的回调
-	uiInstanceId = 0;			-- UI的实例ID
-	uiBindCore = nil;			-- 绑定Prefab中节点控件
+	self.uiInitRequestId = 0;		-- 异步请求ID
+	self.uiInitFinishCall = nil;	-- 请求加载完成后的回调
+	self.uiInstanceId = 0;			-- UI的实例ID
+	self.uiBindCore = nil;			-- 绑定Prefab中节点控件
 
-	registerMessages = nil;		-- 注册的消息
+	self.registerMessages = nil;	-- 注册的消息
 
 	-- 打开关闭流程
-	isShow = false;				-- 当前UI是否显示
+	self.isShow = false;			-- 当前UI是否显示
+
+	-- 注册脚本
+	UIManager:SetControlScript(self.name,self);
 end
 
 -- 设置UI参数
@@ -32,8 +36,12 @@ end
 
 -- 加载
 function _M:Init(initFinishCall)
+	-- 加载中
+	if self:IsIniting() then
+		return;
+	end
 	-- 已经加载
-	if self.uiInstanceId > 0 then 
+	if self:IsInit() then
 		if initFinishCall then 
 			initFinishCall();
 		end
@@ -43,17 +51,18 @@ function _M:Init(initFinishCall)
 	-- 开始加载
 	self.uiInitFinishCall = initFinishCall;
 	self:ShowFullScreenMask();
-	self.uiInitRequestId = CreateUIPanelAsync(GetPrefabPath(self.name),self.OnCreateInstance);
+	self.uiInitRequestId = CreateUIPanelAsync(GetPrefabPath(self.name),function(instanceId) self:OnCreateInstance(instanceId) end);
 end
 
-function _M:OnCreateInstance(intanceId)
-	if intanceId == 0 then 
+function _M:OnCreateInstance(instanceId)
+	self:CloseFullScreenMask();
+	if instanceId == 0 then
 		print("OnCreateInstance is error " ,self.name);
 		return;
 	end
 	
 	self.uiInitRequestId = 0;
-	self.uiInstanceId = intanceId;
+	self.uiInstanceId = instanceId;
 	
 	-- 绑定UICore
 	self:BindUICore();
@@ -72,6 +81,9 @@ end
 -- 打开
 -- isBack：当关闭当前UI时会自动打开前一个关闭的UI，这时isBack为true
 function _M:Show(isBack)
+	if self:IsShow() then
+		return;
+	end
 	-- 1 计算UI层级
 	self:SetUILayer();
 	-- 2 加载atlas
@@ -82,6 +94,12 @@ end
 
 -- 关闭
 function _M:Close(isDestory,closeFinishCall)
+	if not self:IsShow() then
+		self:CloseAfter(isDestory,closeFinishCall);
+		return;
+	end
+
+	self:CloseFullScreenMask();
 	-- 1 释放图集
 	self:ReleaseAtlas();
 	
@@ -91,6 +109,7 @@ function _M:Close(isDestory,closeFinishCall)
 		print("Close is error " .. self.name);
 		return;
 	end
+	self.isShow = false;
 	obj.gameObject:SetActive(false);
 	
 	-- 3 删除UI层级
@@ -98,15 +117,38 @@ function _M:Close(isDestory,closeFinishCall)
 	
 	-- 4 关闭完成
 	self:OnClose();
-	
-	-- 5 关闭回调
-	if closeFinishCall then 
+
+	-- 5 关闭之后的流程
+	self:CloseAfter(isDestory,closeFinishCall);
+end
+
+function _M:CloseAfter(isDestory,closeFinishCall)
+	if closeFinishCall then
 		closeFinishCall();
+	end
+	
+	if isDestory then
+		self:UnInit();
 	end
 end
 
 -- 卸载
 function _M:UnInit()
+	if self:IsShow() then
+		print("please close it first");
+		return
+	end
+	-- 加载中
+	if self:IsIniting() then
+		CancelCreateGameObjectAsync(self.uiInitRequestId);
+		self.uiInitRequestId = 0;
+		return;
+	end
+	-- 已经卸载
+	if not self:IsInit() then
+		return;
+	end
+
 	-- 1 清理消息
 	self:RemoveRegisterMessage();
 
@@ -120,7 +162,7 @@ function _M:UnInit()
 	-- 4 数据清理
 	self:ClearParams();
 
-	-- 4 卸载完成
+	-- 5 卸载完成
 	self:OnDestory();
 end
 
@@ -139,6 +181,7 @@ function _M:OnShowBefore()
 	end
 	
 	-- 显示
+	self.isShow = true;
 	obj.gameObject:SetActive(true);
 
 	-- 显示完成
@@ -183,7 +226,7 @@ function _M:UnBindUIcore()
 	if not self.uiBindCore then 
 		return;
 	end
-	self.uiBindCore:UnInit(self);
+	self.uiBindCore:UnInit();
 end
 
 function _M:BaseRegisterMessage()
@@ -255,11 +298,18 @@ function _M:AddUILayerHelper(layer)
 		return;
 	end
 	local addLayer = layer * 100;
-	-- TODO 获取所有UI下面的所有panel
-	local panels = CommonUtil:GetUIPanels(obj);
-	for i,v in ipairs(panels) do
-		v.depth = v.depth + addLayer;
+	local panels = CommonUtil.GetUIPanels(obj);
+	-- C#中的用法 在lua中显得很另类
+	for i = 0, panels.Length - 1 do
+		panels[i].depth = panels[i].depth + addLayer;
 	end
+end
+
+function _M:ShowFullScreenMask()
+	-- TODO
+end
+function _M:CloseFullScreenMask()
+	-- TODO
 end
 
 -- 主UI(自动流程) 文件头有解释
@@ -290,9 +340,13 @@ function _M:IsSonUI()
 	return false;
 end
 
+-- 加载中
+function _M:IsIniting()
+	return self.uiInitRequestId > 0;
+end
 -- 是否加载
 function _M:IsInit()
-	return self.uiInstanceId > 0;
+	return self.uiInstanceId ~= 0;
 end
 -- 是否显示
 function _M:IsShow()
