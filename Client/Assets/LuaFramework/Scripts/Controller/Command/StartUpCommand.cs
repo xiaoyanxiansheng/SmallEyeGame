@@ -18,6 +18,7 @@ public class StartUpCommand : ControllerCommand {
         //-----------------初始化管理器-----------------------
         // 增加资源管理模块
         AppFacade.Instance.AddManager<ResourceUtil>(ManagerName.ResourceUtil);
+        AppFacade.Instance.AddManager<TimerUtil>(ManagerName.TimerManager);
 
         AppFacade.Instance.AddManager<LuaManager>(ManagerName.Lua);
         //AppFacade.Instance.AddManager<PanelManager>(ManagerName.Panel);
