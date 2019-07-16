@@ -26,7 +26,17 @@ function _M:UpdateEnd(tutId)
     table.insert(self.tutData,tutId);
 end
 
------------------------------------------------------------------------------
-RegisterMessage(MsgConst.TutEvent_End,function(tutId)
+----------------------------------- 与服务器通信 ------------------------------------------
+-- 新手引导完成
+function _M:SendTutEnd(tutId)
+	-- 这里还缺一步 应该是发送到服务器 因为现在没有服务器 所以客户端直接转发
+	local msg = BeginMessage(MsgConst.S2C_Tut_End);
+	msg.tutId = tutId;
+	SendMessage(msg);
+end
+
+-- 收到服务器返回的消息
+RegisterMessage(MsgConst.S2C_Tut_End,function(tutId)
     self:UpdateEnd(tutId);
+    SendMessage(BeginMessage(MsgConst.Tut_End));
 end)
