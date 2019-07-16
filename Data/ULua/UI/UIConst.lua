@@ -10,6 +10,9 @@ UIConst = {
 	UIPanel_Father = "UIPanel_Father",
 	UIPanel_FatherSon1 = "UIPanel_FatherSon1",
 	UIPanel_FatherSon2 = "UIPanel_FatherSon2",
+
+	-- 新手引导
+	UIPanel_Tut = "UIPanel_Tut",
 };
 
 UIPath = {
@@ -37,6 +40,10 @@ UIPath = {
 	UIPanel_FatherSon2 = {
 		"ui/prefab/uipanel_fatherson2",
 		"Data/ULua/UI/Views/UIPanel_FatherSon2",
+	},
+	UIPanel_Tut = {
+		"ui/prefab/uipanel_tut",
+		"Data/ULua/UI/Views/Tut/UIPanel_Tut",
 	},
 }
 
@@ -79,4 +86,6 @@ UISetting = {
 	UIPanel_Father = {uiType = 1},
 	UIPanel_FatherSon1 = {uiType = 0};
 	UIPanel_FatherSon2 = {uiType = 0};
+
+	UIPanel_Tut = {uiType = 2,topLayer=1},
 }

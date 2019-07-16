@@ -185,6 +185,11 @@ function _M:OnShowBefore()
 
 	-- 显示完成
 	self:OnShow();
+
+	-- 通知UI已经打开
+	local msg = BenginMessage(MsgConst.UI_Open);
+	msg.viewName = self.name;
+	SendMessage(msg);
 end
 
 -- 加载完成

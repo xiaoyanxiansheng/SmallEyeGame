@@ -1,7 +1,7 @@
 --[[
 	注册消息，发送消息
 --]]
-Message = {};
+local Message = {};
 
 -- 消息体
 function BenginMessage(msgName)
@@ -21,7 +21,7 @@ function RegisterMessage(msgName,call)
 		Message[msgName] = {};
 	end
 	table.Remove(Message[msgName],call,true);
-	table.inert(Message[msgName],call);
+	table.insert(Message[msgName],call);
 end
 
 -- 删除消息
