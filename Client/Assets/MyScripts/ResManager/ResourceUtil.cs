@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ResourceUtil : MonoBehaviour{
 
+    public static bool isLog = false;
+
     public static string bundleRootPath = Application.dataPath + "/AssetBundles/";
 
 	public static int requestId = 0;

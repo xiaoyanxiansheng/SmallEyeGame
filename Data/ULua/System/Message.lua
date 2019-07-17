@@ -16,12 +16,18 @@ function SendMessage(msg)
 end
 
 -- 注册消息
-function RegisterMessage(msgName,call)
+function RegisterMessage(msgName,tCall,t)
 	if not Message[msgName] then 
 		Message[msgName] = {};
 	end
-	table.Remove(Message[msgName],call,true);
-	table.insert(Message[msgName],call);
+	local inIndex = table.ContainValue(Message[msgName],tCall,"tCall");
+	if inIndex ~= 0 then
+		return;
+	end
+	local msg = {};
+	msg.t = t;
+	msg.tCall = tCall;
+	table.insert(Message[msgName],msg);
 end
 
 -- 删除消息
@@ -29,7 +35,10 @@ function RemoveMessage(msgName,call)
 	if not Message[msgName] then 
 		return;
 	end
-	table.Remove(Message[msgName],call,true);
+	local inIndex = table.ContainValue(Message[msgName],call,"tCall");
+	if inIndex ~= 0 then
+		table.remove(Message[msgName],inIndex);
+	end
 end
 
 -- 触发注册消息
@@ -39,6 +48,6 @@ function DispatchMessage(msg)
 		return;
 	end
 	for i,v in ipairs(registers) do
-		v(msg);
+		v.tCall(v.t,msg);
 	end
 end

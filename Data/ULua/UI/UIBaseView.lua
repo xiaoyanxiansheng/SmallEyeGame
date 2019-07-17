@@ -53,6 +53,7 @@ function _M:Init(initFinishCall)
 end
 
 function _M:OnCreateInstance(instanceId)
+	self:CloseFullScreenMask();
 	if instanceId == 0 then
 		print("OnCreateInstance is error " ,self.name);
 		return;
@@ -230,6 +231,7 @@ function _M:UnBindUIcore()
 	self.uiBindCore:UnInit();
 end
 
+-- 事件
 function _M:BaseRegisterMessage()
 	self:OnRegisterMessage();
 end
@@ -249,7 +251,7 @@ function _M:RegisterMessage(msgName,call)
 				end
 	table.InsertOnlyValue(self.registerMessages[msgName],call);
 	-- 注册消息
-	RegisterMessage(msgName,call);
+	RegisterMessage(msgName,call,self);
 end
 function _M:RemoveRegisterMessage()
 	if not self.registerMessages then 
@@ -279,7 +281,6 @@ function _M:SetUILayer()
 		print("SetUILayer is error " , self.name);
 		return;
 	end
-	-- 获取一个层级，这个层级是目前最大的
 	local layer = UILayer:CalculateLayer(self);
 	self:AddUILayerHelper(layer);
 end
@@ -346,6 +347,14 @@ end
 -- 是否显示
 function _M:IsShow()
 	return self.isShow;
+end
+-- 通过路径获取节点
+function _M:GetNode(path)
+	local trans = self.uiBindCore.transform:FindChild(path);
+	if trans then
+		return trans.gameObject;
+	end
+	return nil;
 end
 
 -- region
