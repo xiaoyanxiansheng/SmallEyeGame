@@ -49,10 +49,12 @@ function _M:Init(initFinishCall)
 
 	-- 开始加载
 	self.uiInitFinishCall = initFinishCall;
+	self:ShowFullScreenMask();
 	self.uiInitRequestId = CreateUIPanelAsync(GetPrefabPath(self.name),function(instanceId) self:OnCreateInstance(instanceId) end);
 end
 
 function _M:OnCreateInstance(instanceId)
+	self:CloseFullScreenMask();
 	if instanceId == 0 then
 		print("OnCreateInstance is error " ,self.name);
 		return;
@@ -96,6 +98,7 @@ function _M:Close(isDestory,closeFinishCall)
 		return;
 	end
 
+	self:CloseFullScreenMask();
 	-- 1 释放图集
 	self:ReleaseAtlas();
 	
@@ -230,6 +233,7 @@ function _M:UnBindUIcore()
 	self.uiBindCore:UnInit();
 end
 
+-- 事件
 function _M:BaseRegisterMessage()
 	self:OnRegisterMessage();
 end
@@ -249,7 +253,7 @@ function _M:RegisterMessage(msgName,call)
 				end
 	table.InsertOnlyValue(self.registerMessages[msgName],call);
 	-- 注册消息
-	RegisterMessage(msgName,call);
+	RegisterMessage(msgName,call,self);
 end
 function _M:RemoveRegisterMessage()
 	if not self.registerMessages then 
@@ -279,7 +283,6 @@ function _M:SetUILayer()
 		print("SetUILayer is error " , self.name);
 		return;
 	end
-	-- 获取一个层级，这个层级是目前最大的
 	local layer = UILayer:CalculateLayer(self);
 	self:AddUILayerHelper(layer);
 end
@@ -305,6 +308,14 @@ function _M:AddUILayerHelper(layer)
 	for i = 0, panels.Length - 1 do
 		panels[i].depth = panels[i].depth + addLayer;
 	end
+end
+
+-- TODO 全屏遮罩处理
+function _M:ShowFullScreenMask()
+	-- TODO
+end
+function _M:CloseFullScreenMask()
+	-- TODO
 end
 
 -- 主UI(自动流程) 文件头有解释
@@ -346,6 +357,14 @@ end
 -- 是否显示
 function _M:IsShow()
 	return self.isShow;
+end
+-- 通过路径获取节点
+function _M:GetNode(path)
+	local trans = self.uiBindCore.transform:FindChild(path);
+	if trans then
+		return trans.gameObject;
+	end
+	return nil;
 end
 
 -- region

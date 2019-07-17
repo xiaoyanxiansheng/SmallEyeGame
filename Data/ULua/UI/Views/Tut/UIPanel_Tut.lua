@@ -17,7 +17,7 @@ function _M:OnRegisterMessage()
 end
 
 function _M:OnShow()
-    print("UIPanel_Tut OnShow " .. TutManager.tutId .. "_" .. TutManager.subTutId);
+    print("UIPanel_Tut OnShow " .. TutManager.tutId .. "_" .. TutManager.tutSubId);
 end
 
 function _M:OnClose()

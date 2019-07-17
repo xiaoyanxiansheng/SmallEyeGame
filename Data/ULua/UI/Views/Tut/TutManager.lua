@@ -7,6 +7,9 @@
 --- 触发条件：任务、等级、功能点
 --- 注意点：新手引导肯定是在当前点击消息发送回收到之后才去完成的，
 ---         如果有消息交互的话（比如升级：肯定是升级成功之后才会完成升级的引导而不是点击升级就完成了）。
+--- 下一步引导在上一步引导完成之后触发的情况分两种：
+---     1 直接触发：直接开始下一步引导
+---     2 等待触发：等待消息返回，等待滑动完成，等等；
 
 ---@class TutManager
 TutManager = {
@@ -14,43 +17,49 @@ TutManager = {
     tutSubId = 0;       -- 当前引导流程步骤
     tutNextId = 0;      -- 当前引导流程完成后将要触发的引导流程
     tutNextSubId = 0;   -- 当前引导流程完成后将要触发的引导流程步骤
-
-    receiveBindMsg = 0; -- 有一些引导需要收到服务器的消息才会完成
 };
 
 local _M = TutManager;
 
 -- region 流程控制
+-- 数据初始化
+function _M:Init()
+    self:InitTutConfig();
+    self:RegisterOpenEvent();
+end
+
 -- 开启新手引导步骤
-function _M:OpenTut(tutId,subTutId)
+function _M:OpenTut(tutId,tutSubId)
     if tutId == 0 then
         return;
     end
-    if self.tutId == tutId and self.subTutId == subTutId then
+    if self.tutId == tutId and self.tutSubId == tutSubId then
         return;
     end
 
     self.tutId = tutId;
-    self.subTutId = subTutId;
-    self.tutInfo = self:GetTutInfo();
-    -- 是否需要注册绑定时间 绑定的目的是 有些新手引导需要根据绑定消息的返回来完成
-    if self.tutInfo.receiveBindMsg then 
-        RegisterMessage(self.tutInfo.receiveBindMsg,self.ReceiveBindMessage);
-    end
+    self.tutSubId = tutSubId;
+    self.tutInfo = self:GetTutInfo(self.tutId,self.tutSubId);
+    self.tutNextId = self.tutInfo.tutNextId;
+    self.tutNextSubId = self.tutInfo.tutNextSubId;
+    self.tutNextInfo = self:GetTutInfo(self.tutNextId,self.tutNextSubId);
+    print("[tut open] " .. self.tutId .. " " .. self.tutSubId);
+    -- 注册完成事件
+    self:RegisterEndEvent();
     -- 显示
     UIManager:Open(nil,UIConst.UIPanel_Tut);
 end
 
 -- 结束新手引导步骤
-function _M:EndTut(tutId,subTutId)
+function _M:EndTut(tutId,tutSubId)
     if self.tutId == 0 then 
         return;
     end
     
-    if self.tutId ~= tutId or self.subTutId ~= subTutId then 
+    if self.tutId ~= tutId or self.tutSubId ~= tutSubId then 
         return;
     end
-
+    print("[tut end] " .. self.tutId .. " " .. self.tutSubId);
     -- 是否是关键引导，关键引导完成之后这个引导就完成了，如果还有后续的引导，只是展示作用。
     if self.tutInfo.key == 1 then 
         -- 给服务器发送完成消息
@@ -58,7 +67,7 @@ function _M:EndTut(tutId,subTutId)
     end
 
     self.tutId = 0;
-    self.subTutId = 0;
+    self.tutSubId = 0;
     self.tutInfo = nil;
     self:ClearTut();
     if self.tutNextId == 0 then
@@ -66,16 +75,9 @@ function _M:EndTut(tutId,subTutId)
     end
 end
 
--- 数据初始化
-function _M:Init()
-    self:InitTutConfig();
-    self:InitRegisterEvent();
-end
-
--- 清理新手引导步骤
--- 并未关闭新手引导界面，因为后面还有后续的步骤
+-- 清理新手引导步骤 并未关闭新手引导界面，因为后面还有后续的步骤
 function _M:ClearTut()
-    UIManager:GetViewCollect(UIConst.UIPanel_Tut):ClearTut();
+    UIManager:GetControlScript(UIConst.UIPanel_Tut):ClearTut();
 end
 -- 关闭新手引导界面
 function _M:CloseTut()
@@ -105,11 +107,10 @@ function _M:GetCanDoTutByView(viewName)
     end
     return candoTutId,candoTutSubId;
 end
-
-function _M:GetTutInfo(tutId,subTutId)
+function _M:GetTutInfo(tutId,tutSubId)
     for viewName, tutInfoList in pairs(self.tutConfig) do
         for i, tutInfo in ipairs(tutInfoList) do
-            if tutInfo.tutId == tutId and tutInfo.subTutId == subTutId then
+            if tutInfo.tutId == tutId and tutInfo.tutSubId == tutSubId then
                 return tutInfo;
             end
         end
@@ -123,93 +124,117 @@ end
 function _M:InitTutConfig()
     self.tutConfig = {
         [UIConst.UIPanel_Main] = {
-            {viewName = UIConst.UIPanel_Main,tutId=1000,tutSubId=1,tutNextId=1000,tutNextSubId=2,order=1,path="main/singleButton"},
-            -- {tutId=1001,tutSubId=1,tutNextId=1001,tutNextSubId=2,order=2,path="main/familyButton"},
+            {viewName = UIConst.UIPanel_Main,tutId=1000,tutSubId=1,tutNextId=1000,tutNextSubId=2,order=1,eventType=0,eventValue="main/singleButton"},
+            -- {tutId=1001,tutSubId=1,tutNextId=1001,tutNextSubId=2,order=2,nodePath="main/familyButton"},
         },
         [UIConst.UIPanel_Father] = {
-            {viewName = UIConst.UIPanel_Father,tutId=1000,tutSubId=2,tutNextId=0,tutNextSubId=0,order=1,path="main/grid/001",key=1,receiveBindMsg=MsgConst.Level_Up},
-            -- {tutId=1001,tutSubId=2,tutNextId=0,tutNextSubId=0,order=2,path="main/grid/002",},
+            {viewName = UIConst.UIPanel_Father,tutId=1000,tutSubId=2,tutNextId=0,tutNextSubId=0,order=1,nodePath="main/grid/001",key=1,eventType = 1,eventValue=MsgConst.Level_Up},
+            -- {tutId=1001,tutSubId=2,tutNextId=0,tutNextSubId=0,order=2,nodePath="main/grid/002",},
         },
     };
 end
 -- endregion
 
--- region 事件扩展
--- 注册新手引导的流程事件
-function _M:InitRegisterEvent()
-    RegisterMessage(MsgConst.Tut_End,function(msg) self:RefreshTutMsg(msg.tutId) end);
-    RegisterMessage(MsgConst.UI_Open,function(msg) self:MessageUIOpen(msg.viewName) end);
-    RegisterMessage(MsgConst.UI_Click,function(msg) self:MessageUIClick(msg.nodeName) end);
+-- region 事件扩展：用于增加新手引导类型
+-- region 开启事件：注册
+function _M:RegisterOpenEvent()
+    -- 注册界面打开触发
+    RegisterMessage(MsgConst.UI_Open,self.OpenEvent_UI_Open,self);
 end
+-- 开启事件：UI打开
+function _M:OpenEvent_UI_Open(msg)
+    local viewName = msg.viewName;
 
--- 收到新手引导绑定的消息
-function _M:ReceiveBindMessage()
-    if self.tutId ~= tutId then 
-        return;
-    end
-    RemoveMessage(self.receiveBindMsg,self.ReceiveBindMessage);
-    self.receiveBindMsg = 0;
-    self:EnvetEndTut();
-end
-
--- 页面打开事件
--- name：UI名称
-function _M:MessageUIOpen(viewName)
     local tutId = 0;
-    local subTutId = 0;
+    local tutSubId = 0;
     -- 是否存在引导流程
     if self.tutNextId > 0 then
         -- 打开的页面就是新手引导需要的页面
-        if self.tutInfo.viewName == viewName then
+        if self.tutNextInfo.viewName == viewName then
             tutId = self.tutNextId;
-            subTutId = self.tutNextSubId;
+            tutSubId = self.tutNextSubId;
         end
     else
         -- 开启新的引导
-        tutId,subTutId = self:GetCanDoTutByView(viewName);
+        tutId,tutSubId = self:GetCanDoTutByView(viewName);
     end
-    self:OpenTut(tutId,subTutId);
+    self:OpenTut(tutId,tutSubId);
 end
+-- endregion
 
--- 点击事件
--- name：点击节点的路径
-function _M:MessageUIClick(nodeName)
-    if self.tutId == 0 then
-        return;
-    end
-    local curNodeName = nil;
+-- region 完成事件：注册
+TutManager.EventType_UI_Click = 0;      -- 点击完成
+TutManager.EventType_Msg_Receive = 1;   -- 收到消息完成
+function _M:RegisterEndEvent()
+    local eventType = self.tutInfo.eventType;
+    local eventValue = self.tutInfo.eventValue;
 
-    if curNodeName ~= nodeName then
-        return;
-    end
-
-    self:EnvetEndTut();
-
-    -- 测试
-    if self.tutInfo.receiveBindMsg ~= 0 then 
-        SendMessage(BeginMessage(self.tutInfo.receiveBindMsg));
+    if eventType == self.EventType_UI_Click then
+        -- 完成事件：UI点击
+        self:EndEvent_UI_Click();
+    elseif eventType == self.EventType_Msg_Receive then
+        -- 收到消息完成功能
+        RegisterMessage(eventValue,self.EndEvent_Msg_Receive,self);
     end
 end
-
-function _M:EnvetEndTut()
-    -- 根据绑定的消息来完成
-    if self.receiveBindMsg ~= 0 then 
-        return;
-    end
-    -- 完成当前步骤引导
-    self:EndTut();
-    -- 是否还存在下一步引导
-    if self.tutNextId > 0 then
-        if UIManager:GetControlScript(self.tutInfo.viewName):IsShow() then
-            self:OpenTut(self.tutNextId,self.tutNextSubId);
+-- 完成事件：UI点击
+function _M:EndEvent_UI_Click()
+    local view = UIManager:GetControlScript(self.tutInfo.viewName);
+    if view then
+        local go = view:GetNode(self.tutInfo.eventValue);
+        if go then
+            UIEventListener.AddClick(go,function(sender)
+                self:EndEvent();
+            end);
         else
-            -- 页面打开的时候会自动触发 self:MessageUIOpen 从而触发下一引导
+            print("EndEvent_UI_Click is error " .. self.tutInfo.viewName .." not find "..self.tutInfo.eventValue);
         end
-    else
-        -- 如果这里还有引导A的话就错误了
-        -- 修改配置让引导A衔接上一引导流程，就不会再进这里，self.tutNextId>0
     end
 end
+-- 完成事件：收到消息
+function _M:EndEvent_Msg_Receive()
+    if not self.tutInfo then
+        return;
+    end
+    -- 取消注册
+    RemoveMessage(self.tutInfo.eventValue,self.EndEvent_Msg_Receive);
+    -- 完成
+    self:EndEvent();
+end
+
+function _M:EndEvent()
+    if not self.tutInfo then
+        return;
+    end
+
+    local eventType = self.tutInfo.eventType
+    local eventValue = self.tutInfo.eventValue;
+    local viewName = self.tutInfo.viewName;
+
+    if eventType == self.EventType_None then
+        self:EndTut(self.tutId,self.tutSubId);
+    elseif eventType == self.EventType_UI_Click then
+        self:EndTut(self.tutId,self.tutSubId);
+    elseif eventType == self.EventType_Msg_Receive then
+        -- 等待消息返回才能完成
+    else
+        -- 还有一些事件也不能直接完成 比如拖动 滑动事件 必须等待事件完成才能触发完成
+    end
+
+    -- 完成当前步骤引导
+    self:EndTut(self.tutId,self.tutSubId);
+
+    -- 是否还存在下一步引导
+    if not TutData:IsCando(self.tutNextId) then
+        return;
+    end
+    if UIManager:GetControlScript(self.tutNextInfo.viewName):IsShow() then
+        self:OpenTut(self.tutNextId,self.tutNextSubId);
+    else
+        -- 页面打开的时候会自动触发 self:MessageUIOpen 从而触发下一引导
+    end
+end
+-- endregion
 -- endregion
 
 _M:Init();

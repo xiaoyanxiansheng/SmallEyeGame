@@ -297,7 +297,7 @@ public class RequestLoadBundle{
     private static void EnterLoadWait(LoadBundleInfo loadBundleInfo)
     {
         loadBundleInfo.step = LoadBundleStep.LoadWait;
-        Debug.Log("[load assetbundle] step 1 EnterLoadWait : " + loadBundleInfo.bundleName);
+        if (ResourceUtil.isLog) Debug.Log("[load assetbundle] step 1 EnterLoadWait : " + loadBundleInfo.bundleName);
     }
     /// <summary>
     /// 进入加载状态 包括依赖加载
@@ -306,7 +306,7 @@ public class RequestLoadBundle{
     private static void EnterLoading(LoadBundleInfo loadBundleInfo)
     {
         loadBundleInfo.step = LoadBundleStep.Loading;
-        Debug.Log("[load assetbundle] step 2 EnterLoading : " + loadBundleInfo.bundleName);
+        if (ResourceUtil.isLog) Debug.Log("[load assetbundle] step 2 EnterLoading : " + loadBundleInfo.bundleName);
     }
     /// <summary>
     /// 加载成功后回调状态
@@ -315,7 +315,7 @@ public class RequestLoadBundle{
     private static void EnterWaitCall(LoadBundleInfo loadBundleInfo)
     {
         loadBundleInfo.step = LoadBundleStep.WaitCall;
-        Debug.Log("[load assetbundle] step 3 EnterWaitCall : " + loadBundleInfo.bundleName);
+        if (ResourceUtil.isLog) Debug.Log("[load assetbundle] step 3 EnterWaitCall : " + loadBundleInfo.bundleName);
     }
     #endregion
 
