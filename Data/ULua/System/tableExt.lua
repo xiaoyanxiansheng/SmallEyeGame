@@ -72,15 +72,3 @@ function table.InsertOnlyValue(t,value)
     table.Remove(t,value,true);
     table.inert(t,value);
 end
-
--- 克隆
-function table.Clone(t)
-    if not t then 
-        return;
-    end
-    local tt = {};
-    for k,v in pairs(t) do
-        tt[k] = v;
-    end
-    return tt;
-end

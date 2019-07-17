@@ -18,9 +18,9 @@ function _M:Init(params,initFinishCall,views)
 	self.params = params;
 	-- 加载列表
 	self:AddInitView(views);
+	-- 等待打开列表
+	self:AddOpeningViews(views);
 
-	-- 加载前开启全屏屏蔽UI：防止看到场景和防止误触
-	self:ShowFullScreenMask();
 	-- 加载所有UI 全部加载完成后才算加载完成
 	local curInitCount = 0;
 	local totalInitCount = #views;
@@ -30,12 +30,7 @@ function _M:Init(params,initFinishCall,views)
 		viewScript:SetParams(params);
 		viewScript:Init(function()
 			curInitCount = curInitCount + 1;
-			-- 加载完成
 			if curInitCount == totalInitCount then
-				-- 关闭全屏屏蔽UI
-				self:CloseFullScreenMask();
-				-- 等待打开列表
-				self:AddOpeningViews(views);
 				if initFinishCall then
 					initFinishCall();
 				end
@@ -69,7 +64,17 @@ function _M:CloseAll(closeFinishCall,isDestory,isBack)
 	end
 
 	-- 保存返回列表
-	local openingViews = isBack and table.Clone(self.openedViews) or nil;
+	local openingViews = nil;
+	if isBack then
+		if self.openedViews then
+			for i, v in ipairs(self.openedViews) do
+				if not openingViews then
+					openingViews = {};
+				end
+				table.insert(openingViews,v);
+			end
+		end
+	end
 
 	-- 从后往前关闭UI
 	local UICount = #views;
@@ -82,8 +87,10 @@ function _M:CloseAll(closeFinishCall,isDestory,isBack)
 	end
 
 	-- 加入保存列表 等待返回流程的时候打开
-	if openingViews then
-		self:AddOpeningViews(openingViews,true);
+	if isBack then
+		if openingViews then
+			self:AddOpeningViews(openingViews,true);
+		end
 	end
 end
 
@@ -108,13 +115,6 @@ function _M:ctor()
 	self.openingViews = nil;
 	-- 已经打开的页面
 	self.openedViews = nil;
-end
-
-function _M:ShowFullScreenMask()
-	-- TODO
-end
-function _M:CloseFullScreenMask()
-	-- TODO
 end
 
 function _M:AddInitView(views,isReset)
