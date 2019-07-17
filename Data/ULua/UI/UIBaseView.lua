@@ -233,6 +233,7 @@ function _M:UnBindUIcore()
 	self.uiBindCore:UnInit();
 end
 
+-- 事件
 function _M:BaseRegisterMessage()
 	self:OnRegisterMessage();
 end
@@ -252,7 +253,7 @@ function _M:RegisterMessage(msgName,call)
 				end
 	table.InsertOnlyValue(self.registerMessages[msgName],call);
 	-- 注册消息
-	RegisterMessage(msgName,call);
+	RegisterMessage(msgName,call,self);
 end
 function _M:RemoveRegisterMessage()
 	if not self.registerMessages then 
@@ -309,6 +310,7 @@ function _M:AddUILayerHelper(layer)
 	end
 end
 
+-- TODO 全屏遮罩处理
 function _M:ShowFullScreenMask()
 	-- TODO
 end
@@ -355,6 +357,14 @@ end
 -- 是否显示
 function _M:IsShow()
 	return self.isShow;
+end
+-- 通过路径获取节点
+function _M:GetNode(path)
+	local trans = self.uiBindCore.transform:FindChild(path);
+	if trans then
+		return trans.gameObject;
+	end
+	return nil;
 end
 
 -- region

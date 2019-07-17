@@ -4,6 +4,7 @@
 //----------------------------------------------
 
 using UnityEngine;
+using LuaInterface;
 
 /// <summary>
 /// Event Hook class lets you easily add remote event listener functions to an object.
@@ -64,4 +65,14 @@ public class UIEventListener : MonoBehaviour
 		if (listener == null) listener = go.AddComponent<UIEventListener>();
 		return listener;
 	}
+
+    static public void AddClick(GameObject go,LuaFunction luaFunc)
+    {
+        Get(go).onClick += (GameObject sender) => {
+            if (luaFunc != null)
+            {
+                luaFunc.Call(sender);
+            }
+        };
+    }
 }

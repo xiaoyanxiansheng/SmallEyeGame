@@ -239,7 +239,7 @@ public class RequestLoadAsset{
     private static void EnterLoadWait(LoadAssetInfo loadAssetInfo)
     {
         loadAssetInfo.step = LoadAssetStep.LoadWait;
-        Debug.Log("loadAsset step 1 EnterLoadWait : " + loadAssetInfo.assetName);
+        if (ResourceUtil.isLog) Debug.Log("loadAsset step 1 EnterLoadWait : " + loadAssetInfo.assetName);
     }
     /// <summary>
     /// 进入依赖加载
@@ -248,7 +248,7 @@ public class RequestLoadAsset{
     private static void EnterLoadDepend(LoadAssetInfo loadAssetInfo)
     {
         loadAssetInfo.step = LoadAssetStep.LoadDepend;
-        Debug.Log("loadAsset step 2 EnterLoadDepend : " + loadAssetInfo.assetName);
+        if (ResourceUtil.isLog) Debug.Log("loadAsset step 2 EnterLoadDepend : " + loadAssetInfo.assetName);
     }
     /// <summary>
     /// 进入加载
@@ -257,7 +257,7 @@ public class RequestLoadAsset{
     private static void EnterLoading(LoadAssetInfo loadAssetInfo)
     {
         loadAssetInfo.step = LoadAssetStep.Loading;
-        Debug.Log("loadAsset step 3 EnterLoading : " + loadAssetInfo.assetName);
+        if (ResourceUtil.isLog) Debug.Log("loadAsset step 3 EnterLoading : " + loadAssetInfo.assetName);
     }
     /// <summary>
     /// 进入加载回调
@@ -266,7 +266,7 @@ public class RequestLoadAsset{
     private static void EnterWaitCall(LoadAssetInfo loadAssetInfo)
     {
         loadAssetInfo.step = LoadAssetStep.WaitCall;
-        Debug.Log("loadAsset step 4 EnterWaitCall : " + loadAssetInfo.assetName);
+        if (ResourceUtil.isLog) Debug.Log("loadAsset step 4 EnterWaitCall : " + loadAssetInfo.assetName);
     }
     #endregion
 
