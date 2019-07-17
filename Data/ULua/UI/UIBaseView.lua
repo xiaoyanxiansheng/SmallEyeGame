@@ -49,6 +49,7 @@ function _M:Init(initFinishCall)
 
 	-- 开始加载
 	self.uiInitFinishCall = initFinishCall;
+	self:ShowFullScreenMask();
 	self.uiInitRequestId = CreateUIPanelAsync(GetPrefabPath(self.name),function(instanceId) self:OnCreateInstance(instanceId) end);
 end
 
@@ -97,6 +98,7 @@ function _M:Close(isDestory,closeFinishCall)
 		return;
 	end
 
+	self:CloseFullScreenMask();
 	-- 1 释放图集
 	self:ReleaseAtlas();
 	
@@ -306,6 +308,14 @@ function _M:AddUILayerHelper(layer)
 	for i = 0, panels.Length - 1 do
 		panels[i].depth = panels[i].depth + addLayer;
 	end
+end
+
+-- TODO 全屏遮罩处理
+function _M:ShowFullScreenMask()
+	-- TODO
+end
+function _M:CloseFullScreenMask()
+	-- TODO
 end
 
 -- 主UI(自动流程) 文件头有解释
