@@ -1,0 +1,25 @@
+ManifestFileVersion: 0
+CRC: 1351474216
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: ui/prefab/uipanel_base
+      Dependencies: {}
+    Info_1:
+      Name: ui/prefab/uipanel_fatherson2
+      Dependencies: {}
+    Info_2:
+      Name: ui/prefab/uipanel_fatherson1
+      Dependencies: {}
+    Info_3:
+      Name: ui/prefab/uipanel_father
+      Dependencies: {}
+    Info_4:
+      Name: ui/prefab/uipanel_messagebox
+      Dependencies: {}
+    Info_5:
+      Name: ui/prefab/uipanel_main
+      Dependencies: {}
+    Info_6:
+      Name: ui/prefab/uipanel_tut
+      Dependencies: {}
