@@ -81,6 +81,7 @@ end
 -- isBack：当关闭当前UI时会自动打开前一个关闭的UI，这时isBack为true
 function _M:Show(isBack)
 	if self:IsShow() then
+		self:OnShow();
 		return;
 	end
 	-- 1 计算UI层级
@@ -187,7 +188,7 @@ function _M:OnShowBefore()
 	self:OnShow();
 
 	-- 通知UI已经打开
-	local msg = BenginMessage(MsgConst.UI_Open);
+	local msg = BeginMessage(MsgConst.UI_Open);
 	msg.viewName = self.name;
 	SendMessage(msg);
 end

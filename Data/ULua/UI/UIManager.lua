@@ -4,6 +4,9 @@
 --]]
 
 UIManager = {
+	-- UI相机列表
+	uiCameraTransDic = {};
+
 	-- ui控制脚本
 	uiViewScripts = {};
 	-- 已加载集合
@@ -13,6 +16,58 @@ UIManager = {
 };
 
 local _M = UIManager;
+
+-- region 根节点信息
+function _M:InitData()
+	-- 加载UI的根节点
+	local UIRootName = "ui/prefab/uipanel_base";
+	CreateGameObjectAsync(1,UIRootName,function(instanceId)
+		local obj = GetGameObjectById(instanceId);
+		if obj then
+			obj.transform.position = Vector3.New(0,0,0);
+			obj.gameObject:SetActive(true);
+			GameObject.DontDestroyOnLoad(obj);
+
+			-- 初始化相机列表
+			self:InitDataCameraList(obj);
+
+			-- 根节点加载完成之后UI相关的流程才真正开始
+			self:OpenTestUI();
+		else
+			print("GameMian is error " .. UIRootName);
+		end
+	end);
+end
+-- 三个相机能看到的层
+_M.CAMERA_NGUI_BOTTOM 	= "NGUI_BOTTOM";
+_M.CAMERA_NGUI 			= "NGUI";
+_M.CAMERA_NGUI_TOP 		= "NGUI_TOP";
+function _M:InitDataCameraList(rootNode)
+	-- 层 对应的 相机
+	self.uiCameraTransDic[self.CAMERA_NGUI_BOTTOM] 	= rootNode.transform:FindChild("CameraBottom");
+	self.uiCameraTransDic[self.CAMERA_NGUI] 		= rootNode.transform:FindChild("Camera");
+	self.uiCameraTransDic[self.CAMERA_NGUI_TOP] 	= rootNode.transform:FindChild("CameraTop");
+end
+-- 得到一个UI相机
+function _M:GetUICameraTrans(name)
+	return self.uiCameraTransDic[name];
+end
+-- UI相机的事件屏蔽
+function _M:ForbidUIEvent(name,isForbid)
+	self:GetUICameraTrans(name).gameObject:GetComponent("UICamera").enabled = not isForbid;
+end
+-- 层级设置
+function _M:SetNodeLayer(go,layerName)
+	if not go then
+		return;
+	end
+	go.layer = UnityEngine.LayerMask.NameToLayer(layerName)
+end
+-- 测试
+function _M:OpenTestUI()
+	UIManager:Open(nil,UIConst.UIPanel_Main);
+end
+-- endregion
 
 --region 对外部提供
 -- 加载UI
@@ -176,3 +231,5 @@ function _M:RemoveOpenViewCollect(viewCollect)
 	table.Remove(self.openViewCollects,viewCollect,true);
 end
 --endregion
+
+_M:InitData();

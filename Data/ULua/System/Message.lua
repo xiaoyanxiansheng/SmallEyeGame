@@ -4,7 +4,7 @@
 local Message = {};
 
 -- 消息体
-function BenginMessage(msgName)
+function BeginMessage(msgName)
 	local msg = {};
 	msg.name = msgName;
 	return msg;
@@ -48,6 +48,10 @@ function DispatchMessage(msg)
 		return;
 	end
 	for i,v in ipairs(registers) do
-		v.tCall(v.t,msg);
+		if (v.t ~= nil) then
+			v.tCall(v.t,msg);
+		else
+			v.tCall(msg);
+		end
 	end
 end

@@ -9,8 +9,13 @@ public class CommonUtilWrap
 		L.BeginClass(typeof(CommonUtil), typeof(System.Object));
 		L.RegFunction("GetUIPanels", GetUIPanels);
 		L.RegFunction("TrimGameObejct", TrimGameObejct);
+		L.RegFunction("AddTopClick", AddTopClick);
+		L.RegFunction("AddClick", AddClick);
+		L.RegFunction("DelClick", DelClick);
+		L.RegFunction("AddComponent", AddComponent);
 		L.RegFunction("New", _CreateCommonUtil);
 		L.RegFunction("__tostring", ToLua.op_ToString);
+		L.RegVar("LuaFuncToDel", get_LuaFuncToDel, set_LuaFuncToDel);
 		L.EndClass();
 	}
 
@@ -63,6 +68,104 @@ public class CommonUtilWrap
 			ToLua.CheckArgsCount(L, 1);
 			UnityEngine.GameObject arg0 = (UnityEngine.GameObject)ToLua.CheckObject(L, 1, typeof(UnityEngine.GameObject));
 			CommonUtil.TrimGameObejct(arg0);
+			return 0;
+		}
+		catch (Exception e)
+		{
+			return LuaDLL.toluaL_exception(L, e);
+		}
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int AddTopClick(IntPtr L)
+	{
+		try
+		{
+			ToLua.CheckArgsCount(L, 2);
+			UnityEngine.GameObject arg0 = (UnityEngine.GameObject)ToLua.CheckObject(L, 1, typeof(UnityEngine.GameObject));
+			LuaFunction arg1 = ToLua.CheckLuaFunction(L, 2);
+			CommonUtil.AddTopClick(arg0, arg1);
+			return 0;
+		}
+		catch (Exception e)
+		{
+			return LuaDLL.toluaL_exception(L, e);
+		}
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int AddClick(IntPtr L)
+	{
+		try
+		{
+			ToLua.CheckArgsCount(L, 2);
+			UnityEngine.GameObject arg0 = (UnityEngine.GameObject)ToLua.CheckObject(L, 1, typeof(UnityEngine.GameObject));
+			LuaFunction arg1 = ToLua.CheckLuaFunction(L, 2);
+			CommonUtil.AddClick(arg0, arg1);
+			return 0;
+		}
+		catch (Exception e)
+		{
+			return LuaDLL.toluaL_exception(L, e);
+		}
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int DelClick(IntPtr L)
+	{
+		try
+		{
+			ToLua.CheckArgsCount(L, 2);
+			UnityEngine.GameObject arg0 = (UnityEngine.GameObject)ToLua.CheckObject(L, 1, typeof(UnityEngine.GameObject));
+			LuaFunction arg1 = ToLua.CheckLuaFunction(L, 2);
+			CommonUtil.DelClick(arg0, arg1);
+			return 0;
+		}
+		catch (Exception e)
+		{
+			return LuaDLL.toluaL_exception(L, e);
+		}
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int AddComponent(IntPtr L)
+	{
+		try
+		{
+			ToLua.CheckArgsCount(L, 2);
+			UnityEngine.GameObject arg0 = (UnityEngine.GameObject)ToLua.CheckObject(L, 1, typeof(UnityEngine.GameObject));
+			string arg1 = ToLua.CheckString(L, 2);
+			UnityEngine.Component o = CommonUtil.AddComponent(arg0, arg1);
+			ToLua.Push(L, o);
+			return 1;
+		}
+		catch (Exception e)
+		{
+			return LuaDLL.toluaL_exception(L, e);
+		}
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_LuaFuncToDel(IntPtr L)
+	{
+		try
+		{
+			ToLua.PushSealed(L, CommonUtil.LuaFuncToDel);
+			return 1;
+		}
+		catch (Exception e)
+		{
+			return LuaDLL.toluaL_exception(L, e);
+		}
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_LuaFuncToDel(IntPtr L)
+	{
+		try
+		{
+			System.Collections.Generic.Dictionary<LuaInterface.LuaFunction,System.Delegate> arg0 = (System.Collections.Generic.Dictionary<LuaInterface.LuaFunction,System.Delegate>)ToLua.CheckObject(L, 2, typeof(System.Collections.Generic.Dictionary<LuaInterface.LuaFunction,System.Delegate>));
+			CommonUtil.LuaFuncToDel = arg0;
 			return 0;
 		}
 		catch (Exception e)
