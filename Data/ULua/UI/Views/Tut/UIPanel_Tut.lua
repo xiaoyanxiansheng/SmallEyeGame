@@ -19,6 +19,12 @@ function _M:OnShow()
     self:SetNodeDisplay(UIManager.CAMERA_NGUI_TOP);
 end
 
+function _M:ClearTut()
+    -- 恢复节点到NGUI层中
+    self:SetNodeDisplay(UIManager.CAMERA_NGUI);
+    self.tutInfo = nil;
+end
+
 function _M:OnClose()
     -- 1. 开启NGUI层的UI事件
     UIManager:ForbidUIEvent(UIManager.CAMERA_NGUI,false);
@@ -37,26 +43,24 @@ function _M:SetNodeDisplay(layer)
         print(" RefreshNodeDisplay is error " .. self.tutInfo.tutId .. " " .. self.tutInfo.tutSubId .. " " .. triggerEventValue);
         return;
     end
-    -- 注意：只有UIPanel才能改变显示层 不然修改无效
-    local tempPanel = displayNode:GetComponent("UIPanel");
-    if not tempPanel then
-        tempPanel = AddComponent(displayNode,"UIPanel");
-        -- 高亮显示
-        tempPanel.depth = 10000;
-        self.addPanel = tempPanel;
+    if layer == UIManager.CAMERA_NGUI_TOP then 
+        -- 注意：只有UIPanel才能改变显示层 不然修改无效
+        local tempPanel = displayNode:GetComponent("UIPanel");
+        if not tempPanel then
+            tempPanel = AddComponent(displayNode,"UIPanel");
+            -- 高亮显示
+            tempPanel.depth = 10000;
+            self.addPanel = tempPanel;
+        end
+    else
+        -- 删除增加panel
+        if self.addPanel then
+            GameObject.Destroy(self.addPanel);
+            self.addPanel = nil;
+        end
     end
+    
     displayNode:SetActive(false);
     displayNode:SetActive(true);
     UIManager:SetNodeLayer(displayNode,layer);
-end
-
-function _M:ClearTut()
-    -- 删除增加panel
-    if self.addPanel then
-        GameObject.Destroy(self.addPanel);
-        self.addPanel = nil;
-    end
-
-    self:SetNodeDisplay(UIManager.CAMERA_NGUI);
-    self.tutInfo = nil;
 end

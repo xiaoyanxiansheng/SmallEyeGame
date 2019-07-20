@@ -31,6 +31,7 @@ public class CommonUtil{
     {
         UIEventListener listener = UIEventListener.Get(go);
 
+        // 1. 保存清空当前注册事情
         Delegate[] dels = listener.onClick.GetInvocationList();
         List<UIEventListener.VoidDelegate> tempDeList = new List<UIEventListener.VoidDelegate>();
         for (int i = dels.Length - 1; i >= 0; i--)
@@ -40,6 +41,7 @@ public class CommonUtil{
             tempDeList.Add(tempDel);
             listener.onClick -= tempDel;
         }
+        // 2. 将lua的方法变成一个委托类型
         UIEventListener.VoidDelegate luaFuncDel = (GameObject sender) =>
         {
             if (luaFunc != null)
@@ -47,7 +49,10 @@ public class CommonUtil{
                 luaFunc.Call(sender);
             }
         };
+        if (!LuaFuncToDel.ContainsKey(luaFunc)) LuaFuncToDel.Add(luaFunc, luaFuncDel);
+        // 3. 先加入当前注册事件
         listener.onClick += luaFuncDel;
+        // 4. 再加入以前的注册的事件
         for (int i = tempDeList.Count - 1; i >= 0; i--)
         {
             listener.onClick += tempDeList[i];
