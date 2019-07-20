@@ -172,7 +172,7 @@ function _M:ClearParams()
 end
 
 -- 打开前处理
-function _M:OnShowBefore()
+function _M:OnShowBefore(isBack)
 	-- 获取实例
 	local obj = GetGameObjectById(self.uiInstanceId);
 	if not obj then 
@@ -185,7 +185,7 @@ function _M:OnShowBefore()
 	obj.gameObject:SetActive(true);
 
 	-- 显示完成
-	self:OnShow();
+	self:OnShow(isBack);
 
 	-- 通知UI已经打开
 	local msg = BeginMessage(MsgConst.UI_Open);
@@ -202,7 +202,7 @@ function _M:OnRegisterMessage()
 	-- 子类重写
 end
 -- 打开完成
-function _M:OnShow()
+function _M:OnShow(isBack)
 	-- 子类重写
 end
 -- 关闭完成

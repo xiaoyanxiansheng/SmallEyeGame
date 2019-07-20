@@ -118,7 +118,7 @@ function _M:Open(params,...)
 end
 function _M:OpenViewcCollect(viewCollect,isBack)
 	self:AddOpenViewCollect(viewCollect);
-	viewCollect:Show()
+	viewCollect:Show(isBack)
 end
 -- 关闭UI或者UI集合
 -- 1 当前UI是主UI 先关闭当前UI集合然后打开上一次UI集合
@@ -147,7 +147,12 @@ function _M:CloseViewCollect(viewCollect,closeFinishCall,isDestory,isBack)
 	if isDestory then
 		self:RemoveInitViewCollect(viewCollect);
 	end
-	viewCollect:CloseAll(closeFinishCall,isDestory,isBack)
+	if isBack then
+		viewCollect:CloseAllAndSave(closeFinishCall,isDestory,isBack);
+	else
+		viewCollect:CloseAll(closeFinishCall,isDestory,isBack);
+	end
+
 end
 --endregion
 

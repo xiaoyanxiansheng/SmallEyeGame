@@ -61,15 +61,12 @@ function _M:Show(isBack)
 end
 
 -- 关闭UI集合
-function _M:CloseAll(closeFinishCall,isDestory,isBack)
+function _M:CloseAll(closeFinishCall,isDestory)
 	-- 卸载流程处理所有UI，关闭流程只需要处理已打开的
 	local views = isDestory and self.initViews or self.openedViews;
 	if not views or #views == 0 then
 		return;
 	end
-
-	-- 保存返回列表
-	local openingViews = isBack and table.Clone(self.openedViews) or nil;
 
 	-- 从后往前关闭UI
 	local UICount = #views;
@@ -80,13 +77,20 @@ function _M:CloseAll(closeFinishCall,isDestory,isBack)
 		local tempCloseFinishCall = view:IsMainUI() and closeFinishCall or nil;
 		self:Close(view,tempCloseFinishCall,isDestory);
 	end
+end
+-- 关闭UI集合并且保存当前打开UI到待打开状态
+function _M:CloseAllAndSave(closeFinishCall,isDestory)
+	-- 保存返回列表
+	local openingViews = table.Clone(self.openedViews);
+
+	-- 关闭UI集合
+	self:CloseAll(closeFinishCall,isDestory);
 
 	-- 加入保存列表 等待返回流程的时候打开
 	if openingViews then
 		self:AddOpeningViews(openingViews,true);
 	end
 end
-
 -- 关闭UI
 function _M:Close(viewScript,closeFinishCall,isDestory)
 	self:RemoveOpeningView(viewScript);
