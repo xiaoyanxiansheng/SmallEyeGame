@@ -175,7 +175,7 @@ public class UICore : MonoBehaviour {
             for(int i = 0; i < count; i++)
             {
                 string rootName = frist.name + (i + 1);
-                string index = "00" + (i + 1);
+                string index = (i + 1).ToString();
                 Transform rooTrans = parent.FindChild(index);
                 cacheParam.Add(BindAllWidgetsHelper(frist, rootName, rooTrans));
                 for(int j = 0; j < v.first.childs.Count; j++)
