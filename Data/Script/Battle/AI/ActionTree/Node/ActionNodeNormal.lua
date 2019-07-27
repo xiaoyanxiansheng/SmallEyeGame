@@ -82,29 +82,31 @@ function ActionNodeParallel:Update(delta)
     while(actionTree) do
         local inIndex = table.ContainValue(self.finishActionTrees,actionTree);
         if inIndex == 0 then
-            if not actionTree.curChildNode then
-                actionTree.curChildNode = actionTree;
-                -- 行为树根节点执行
-                actionTree.curChildNode:DoAction();
+            if not actionTree.curNode then
+                actionTree.curNode = actionTree;
+                actionTree.curNode:DoAction();
             end
-            -- actionTree.curChildNode:Update(delta);
+            actionTree.curNode:Update(delta);
             -- 遍历执行
-            while(not actionTree.curChildNode:CheckActioning()) do
-                local nextNode = actionTree.curChildNode:GetNextNode();
-                actionTree.curChildNode = nextNode;
+            while(not actionTree.curNode:CheckActioning()) do
+                local nextNode = actionTree.curNode:GetNextNode();
+                actionTree.curNode = nextNode;
                 if nextNode and nextNode ~= self then
-                    actionTree.curChildNode:DoAction();
+                    actionTree.curNode:DoAction();
                 else
+                    actionTree.curNode = nil;
                     table.insert(self.finishActionTrees,actionTree);
                     break;
                 end
             end
         end
+
         -- 子树全部执行完毕
         if #self.finishActionTrees >= self.childCount then
             self:EndAction(self);
             break;
         end
+
         actionTree = actionTree.nextChildNode;
     end
 end
