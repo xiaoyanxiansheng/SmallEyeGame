@@ -57,12 +57,13 @@ end
 
 -- region 属性设置
 VT = {
-    INT = 1,
-    FLOAT = 2,
-    STRING = 3,
-    LUAFUNCTION = 4,
-    BOOL = 5,
+    INT = 1,            -- int
+    FLOAT = 2,          -- flaot
+    STRING = 3,         -- string
+    BOOL = 4,           -- bool
+    LUAFUNCTION = 5,    -- lua函数
 }
+-- 设置属性
 function SET_PROP(t,keyStr,propValueType,propValue)
     if not t.prop then
         t.propKey = {};
@@ -73,9 +74,11 @@ function SET_PROP(t,keyStr,propValueType,propValue)
     table.insert(t.propValue,propValue);
     t.propKey[keyStr] = #t.propValueType;
 end
+-- 填充属性
 function SET_PROP_VALUE(t,...)
     t.propValue = {...};
 end
+-- 获取属性
 function GET_PROP(t,keyStr)
     local index = t.propKey[keyStr];
     if not index then

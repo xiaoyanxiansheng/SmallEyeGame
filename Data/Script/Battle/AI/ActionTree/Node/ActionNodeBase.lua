@@ -20,22 +20,14 @@ function _M:ctor(type)
     self.result = nil;          -- 运行时 运行结果
     self.preResult = nil;       -- 运行时 上一节点的运行结果 行为树之间的通信方式
 end
-
 -- 1 运行
-function _M:DoAction()
-
-end
-
+function _M:DoAction()end
 -- 2 更新
-function _M:Update(delta)
-
-end
-
+function _M:Update(delta)end
 -- 3 下一步
 function _M:GetNextNode()
     return self:ReturnParentNode();
 end
-
 -- 完成：不在运行状态
 function _M:EndAction()
     self.isAction = false;

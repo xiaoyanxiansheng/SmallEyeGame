@@ -65,18 +65,22 @@ function _M:Update(delta)
     if not self.activeEvents then
         return;
     end
-
+    -- 执行完成的行为事件列表
     table.Clear(self.deleteEvents,true);
+    -- 已经触发的行为事件（行为事件里面储存有行为树）
     for entityId,event  in ipairs(self.activeEvents) do
         if not event.treeRoot.curNode then
             event.treeRoot.curNode = event.treeRoot;
         end
         event.treeRoot.curNode:Update(delta);
         event.treeRoot.event = event;
+        -- 执行行为树
         self:DoEventTrigger(event.treeRoot,function(finishActionTree)
+            -- 行为树执行完成
             table.insert(self.deleteEvents,finishActionTree.event);
         end);
     end
+    -- 行为树执行完成之后就删除
     local deleteEventsCount = #self.deleteEvents;
     if deleteEventsCount > 0 then
         for i = 1, deleteEventsCount do
@@ -85,7 +89,6 @@ function _M:Update(delta)
         end
     end
 end
-
 function _M:DoEventTrigger(actionTree,finishCall)
     -- 遍历执行
     while(actionTree.curNode and not actionTree.curNode:CheckActioning()) do
@@ -98,16 +101,6 @@ function _M:DoEventTrigger(actionTree,finishCall)
             break;
         end
     end
-end
-
-function _M:StopActionTree(tree)
-    if not tree then
-        return;
-    end
-    if tree.curNode then
-        tree.curNode:Stop();
-    end
-    -- 从active中删除
 end
 
 -- 注册节点信息
