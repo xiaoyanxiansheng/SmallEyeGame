@@ -25,12 +25,22 @@ function table.ContainValue(t,value,param1,param2)
 end
 
 -- 清理table
-function table.Clear(t)
-    if t then 
-        for k,v in pairs(t) do
-            t[k] = nil;
+function table.Clear(t,isArray)
+    if t then
+        if isArray then
+            local count = #t;
+            for i = 1, count do
+                local index = count - i + 1;
+                table.remove(t,index);
+            end
+        else
+            for k,v in pairs(t) do
+                t[k] = nil;
+            end
         end
     end
+
+    return t;
 end
 
 -- table中加入一个table

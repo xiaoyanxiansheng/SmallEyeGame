@@ -235,7 +235,7 @@ end
 -- TODO 新手引导的配置数据 后期使用表格
 function _M:InitTutConfig()
     self.tutConfig = {
-        [UIConst.UIPanel_Main] = {
+        --[[[UIConst.UIPanel_Main] = {
             -- 引导：第一步
             {viewName = UIConst.UIPanel_Main,tutId=1000,tutSubId=1,tutNextId=1000,tutNextSubId=2,order=1,triggerEventType = 1, triggerEventValue="main/singleButton", endEventType=1,endEventValue="main/singleButton"},
             -- 引导：第三步
@@ -248,7 +248,7 @@ function _M:InitTutConfig()
             {viewName = UIConst.UIPanel_Father, tutId=1000,tutSubId=2,tutNextId=1000,tutNextSubId=3, order=1, triggerEventType = 1,triggerEventValue="main/grid/001", endEventType=1,endEventValue="main/grid/001"},
             -- 引导：第五步
             {viewName = UIConst.UIPanel_Father, tutId=1000,tutSubId=5,tutNextId=0,tutNextSubId=0, order=1, triggerEventType = 1,triggerEventValue="main/grid/002", endEventType=1,endEventValue="main/grid/002", key=1},
-        },
+        },--]]
     };
 end
 -- endregion

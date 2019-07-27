@@ -43,14 +43,14 @@ public class TimerUtil : MonoBehaviour {
 
     public static TimerUtil Instance;
     // 每个倒计时都有唯一Id
-    private int _timerUniqueId = 0;
+    private static int _timerUniqueId = 0;
     // 当前保存的所有倒计时信息
-    private Dictionary<int, TimerEvent> _timerEventDic = new Dictionary<int, TimerEvent>();
+    private static Dictionary<int, TimerEvent> _timerEventDic = new Dictionary<int, TimerEvent>();
     // 缓存的倒计时信息（优化）
-    private List<TimerEvent> _freeTimerEventList = new List<TimerEvent>();
+    private static List<TimerEvent> _freeTimerEventList = new List<TimerEvent>();
 
     // 回收一个倒计时信息
-    private void RecoveryTimerEvent(int uniqueId)
+    private static void RecoveryTimerEvent(int uniqueId)
     {
         TimerEvent timerEvent = null;
         if (_timerEventDic.TryGetValue(uniqueId,out timerEvent))
@@ -62,7 +62,7 @@ public class TimerUtil : MonoBehaviour {
     }
 
     // 获取一个倒计时信息
-    private TimerEvent GetTempTimerEvent()
+    private static TimerEvent GetTempTimerEvent()
     {
         TimerEvent tempTimerEvent = null;
         if (_freeTimerEventList.Count > 0)
@@ -133,7 +133,7 @@ public class TimerUtil : MonoBehaviour {
     }
 
     // 进入状态
-    private void EnterState(int uniqueId,TimerState state)
+    private static void EnterState(int uniqueId,TimerState state)
     {
         TimerEvent timerEvent = null;
         if (_timerEventDic.TryGetValue(uniqueId, out timerEvent))
@@ -144,7 +144,7 @@ public class TimerUtil : MonoBehaviour {
     }
 
     // 增加倒计时（CS版本）
-    public int AddTimer(float intervalTime, LuaFunction luaFunc)
+    public static int AddTimer(float intervalTime, LuaFunction luaFunc)
     {
         TimerEvent timerEvent = GetTempTimerEvent();
         timerEvent.intervalTime = intervalTime;
@@ -156,7 +156,7 @@ public class TimerUtil : MonoBehaviour {
     }
 
     // 增加倒计时（Lua版本）
-    public int AddTimer(float intervalTime, CSFunc csFunc)
+    public static int AddTimer(float intervalTime, CSFunc csFunc)
     {
         TimerEvent timerEvent = GetTempTimerEvent();
         timerEvent.intervalTime = intervalTime;
@@ -168,19 +168,19 @@ public class TimerUtil : MonoBehaviour {
     }
 
     // 删除倒计时
-    public void RemoveTimer(int uniqueId)
+    public static void RemoveTimer(int uniqueId)
     {
         EnterState(uniqueId, TimerState.Invalid);
     }
 
     // 停止倒计时
-    public void PauseTimer(int uniqueId)
+    public static void PauseTimer(int uniqueId)
     {
         EnterState(uniqueId, TimerState.Stop);
     }
 
     // 继续倒计时
-    public void ResumeTimer(int uniqueId)
+    public static void ResumeTimer(int uniqueId)
     {
         EnterState(uniqueId, TimerState.Run);
     }

@@ -26,21 +26,19 @@ public class TimerUtilWrap
 		{
 			int count = LuaDLL.lua_gettop(L);
 
-			if (count == 3 && TypeChecker.CheckTypes<TimerUtil.CSFunc>(L, 3))
+			if (count == 2 && TypeChecker.CheckTypes<TimerUtil.CSFunc>(L, 2))
 			{
-				TimerUtil obj = (TimerUtil)ToLua.CheckObject<TimerUtil>(L, 1);
-				float arg0 = (float)LuaDLL.luaL_checknumber(L, 2);
-				TimerUtil.CSFunc arg1 = (TimerUtil.CSFunc)ToLua.ToObject(L, 3);
-				int o = obj.AddTimer(arg0, arg1);
+				float arg0 = (float)LuaDLL.luaL_checknumber(L, 1);
+				TimerUtil.CSFunc arg1 = (TimerUtil.CSFunc)ToLua.ToObject(L, 2);
+				int o = TimerUtil.AddTimer(arg0, arg1);
 				LuaDLL.lua_pushinteger(L, o);
 				return 1;
 			}
-			else if (count == 3 && TypeChecker.CheckTypes<LuaInterface.LuaFunction>(L, 3))
+			else if (count == 2 && TypeChecker.CheckTypes<LuaInterface.LuaFunction>(L, 2))
 			{
-				TimerUtil obj = (TimerUtil)ToLua.CheckObject<TimerUtil>(L, 1);
-				float arg0 = (float)LuaDLL.luaL_checknumber(L, 2);
-				LuaFunction arg1 = ToLua.ToLuaFunction(L, 3);
-				int o = obj.AddTimer(arg0, arg1);
+				float arg0 = (float)LuaDLL.luaL_checknumber(L, 1);
+				LuaFunction arg1 = ToLua.ToLuaFunction(L, 2);
+				int o = TimerUtil.AddTimer(arg0, arg1);
 				LuaDLL.lua_pushinteger(L, o);
 				return 1;
 			}
@@ -60,10 +58,9 @@ public class TimerUtilWrap
 	{
 		try
 		{
-			ToLua.CheckArgsCount(L, 2);
-			TimerUtil obj = (TimerUtil)ToLua.CheckObject<TimerUtil>(L, 1);
-			int arg0 = (int)LuaDLL.luaL_checknumber(L, 2);
-			obj.RemoveTimer(arg0);
+			ToLua.CheckArgsCount(L, 1);
+			int arg0 = (int)LuaDLL.luaL_checknumber(L, 1);
+			TimerUtil.RemoveTimer(arg0);
 			return 0;
 		}
 		catch (Exception e)
@@ -77,10 +74,9 @@ public class TimerUtilWrap
 	{
 		try
 		{
-			ToLua.CheckArgsCount(L, 2);
-			TimerUtil obj = (TimerUtil)ToLua.CheckObject<TimerUtil>(L, 1);
-			int arg0 = (int)LuaDLL.luaL_checknumber(L, 2);
-			obj.PauseTimer(arg0);
+			ToLua.CheckArgsCount(L, 1);
+			int arg0 = (int)LuaDLL.luaL_checknumber(L, 1);
+			TimerUtil.PauseTimer(arg0);
 			return 0;
 		}
 		catch (Exception e)
@@ -94,10 +90,9 @@ public class TimerUtilWrap
 	{
 		try
 		{
-			ToLua.CheckArgsCount(L, 2);
-			TimerUtil obj = (TimerUtil)ToLua.CheckObject<TimerUtil>(L, 1);
-			int arg0 = (int)LuaDLL.luaL_checknumber(L, 2);
-			obj.ResumeTimer(arg0);
+			ToLua.CheckArgsCount(L, 1);
+			int arg0 = (int)LuaDLL.luaL_checknumber(L, 1);
+			TimerUtil.ResumeTimer(arg0);
 			return 0;
 		}
 		catch (Exception e)

@@ -28,7 +28,9 @@ function _M:ClickOpenTest(sender)
     local index = tonumber(sender.transform.name);
     if index == 1 then
         -- 加载测试
-        UIManager:Init(nil,nil,UIConst.UIPanel_Father)
+        -- UIManager:Init(nil,nil,UIConst.UIPanel_Father)
+        -- 开始战斗
+        BattleManager:SendCreateBattle();
     elseif index == 2 then
         -- 打开测试
         UIManager:Open(nil,UIConst.UIPanel_Father);

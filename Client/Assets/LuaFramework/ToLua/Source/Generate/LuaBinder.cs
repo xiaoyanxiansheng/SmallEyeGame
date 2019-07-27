@@ -15,6 +15,7 @@ public static class LuaBinder
 		ResourceUtilWrap.Register(L);
 		UICoreWrap.Register(L);
 		TimerUtilWrap.Register(L);
+		GameLoggerWrap.Register(L);
 		LuaProfilerWrap.Register(L);
 		UIPanelWrap.Register(L);
 		UILabelWrap.Register(L);

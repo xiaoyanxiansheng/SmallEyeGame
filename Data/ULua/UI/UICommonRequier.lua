@@ -3,5 +3,8 @@ require "Data/ULua/UI/UIConst";
 require "Data/ULua/UI/UIBaseCollect";
 require "Data/ULua/UI/UIBaseView";
 require "Data/ULua/UI/UILayer";
-require "Data/ULua/UI/Views/Tut/TutManager";
+require "Data/Ulua/PerformLayer/BattlePerform";
 require "Data/ULua/UI/UIManager";
+
+require "Data/ULua/UI/Views/Tut/TutManager";
+require "Data/ULua/UI/Views/Loading/LoadingManager";

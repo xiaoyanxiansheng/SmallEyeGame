@@ -68,6 +68,7 @@ public static class CustomSettings
         _GT(typeof(ResourceUtil)),
         _GT(typeof(UICore)),
         _GT(typeof(TimerUtil)),
+        _GT(typeof(GameLogger)),
         
 
 #if USING_DOTWEENING

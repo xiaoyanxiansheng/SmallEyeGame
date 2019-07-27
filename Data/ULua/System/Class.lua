@@ -41,7 +41,7 @@ function Class(classname, super)
     end
         -- inherited from Lua Object
         if super then
-            cls = clone(super)
+            cls = Clone(super)
             cls.super = super
         else
             cls = {ctor = function() end}

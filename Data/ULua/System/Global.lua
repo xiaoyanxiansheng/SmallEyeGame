@@ -1,7 +1,8 @@
 GameObject  = UnityEngine.GameObject;
 Object      = UnityEngine.Object;
 GetGameObjectById = ResourceUtil.GetGameObjectById;
-TimerUtil   = TimerUtil.Instance;
+AddTimer   = TimerUtil.Instance.AddTimer;
+RemoveTimer   = TimerUtil.Instance.RemoveTimer;
 AddClick    = CommonUtil.AddClick;
 AddTopClick = CommonUtil.AddTopClick;
 DelClick    = CommonUtil.DelClick;
