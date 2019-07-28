@@ -101,18 +101,12 @@ function _M:Update(delta)
     table.Clear(self.deleteEvents,true);
     -- 已经触发的行为事件（行为事件里面储存有行为树）
     for entityId,event  in ipairs(self.activeEvents) do
-        --if not event.treeRoot.curNode then
-        --    event.treeRoot.curNode = event.treeRoot;
-        --end
-        --event.treeRoot.curNode:Update(delta);
-        --event.treeRoot.event = event;
-        ---- 执行行为树
-        --self:DoEventTrigger(event.treeRoot,function(finishActionTree)
-        --    -- 行为树执行完成
-        --    table.insert(self.deleteEvents,finishActionTree.event);
-        --end);
         -- 是否可以被打断
         if not self.actionEevent or self.actionEevent:CheckTrigger(event) then
+            if self.actionEevent then 
+                self.actionEvent:Break();
+            end
+            -- 执行事件行为树
             event:DoActionTree(delta,function(finishEvent)
                 -- 行为树执行完成
                 table.insert(self.deleteEvents,finishEvent);
@@ -127,19 +121,6 @@ function _M:Update(delta)
         for i = 1, deleteEventsCount do
             local event = self.deleteEvents[deleteEventsCount - i + 1];
             table.Remove(self.activeEvents,event,true);
-        end
-    end
-end
-function _M:DoEventTrigger(actionTree,finishCall)
-    -- 遍历执行
-    while(actionTree.curNode and not actionTree.curNode:CheckActioning()) do
-        local nextNode = actionTree.curNode:GetNextNode();
-        actionTree.curNode = nextNode;
-        if nextNode then
-            actionTree.curNode:DoAction();
-        else
-            finishCall(actionTree);
-            break;
         end
     end
 end

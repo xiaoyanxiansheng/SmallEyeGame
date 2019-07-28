@@ -59,6 +59,9 @@ end
 function _M:Resume()
     self.isPause = false;
 end
+function _M:Break()
+    self:Destory();
+end
 function _M:Destory()
     self.curActionNode = nil;   -- 当前运行节点
     self.isPause = false;       -- 是否暂定
