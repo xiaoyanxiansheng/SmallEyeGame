@@ -11,12 +11,43 @@ ActionTreeManager = {
     registreEvents = nil,         -- 注册的所有事件
     registerEvents = nil,       -- 当前注册的实体事件
     activeEvents = nil,         -- 当前激活的实体事件
+    actionEevent = nil,         -- 当前运行事件（行为树）
 };
 
 local _M = ActionTreeManager;
 
 function _M:Init()
     self:RegisterEvent();
+end
+
+function _M:Destory()
+    self.registerNodes = nil;          -- 注册的所有节点
+    self.registreEvents = nil;         -- 注册的所有事件
+    self.registerEvents = nil;       -- 当前注册的实体事件
+    if self.activeEvents then
+        for i, v in ipairs(self.activeEvents) do
+            v:Destory();
+        end
+    end
+    self.activeEvents = nil;         -- 当前激活的实体事件
+    self.actionEevent = nil;         -- 当前运行事件（行为树）
+end
+
+function _M:Pause()
+    if not self.activeEvents then
+        return;
+    end
+    for i, v in ipairs(self.activeEvents) do
+        v:Pause();
+    end
+end
+function _M:Resume()
+    if not self.activeEvents then
+        return;
+    end
+    for i, v in ipairs(self.activeEvents) do
+        v:Resume();
+    end
 end
 
 -- 开启AI
@@ -55,6 +86,7 @@ function _M:ReceiveMessage(msg)
             local tempEvent = Clone(v);
             tempEvent.param = param;
             table.insert(self.activeEvents,tempEvent);
+            break
         end
     end
 end
@@ -69,16 +101,25 @@ function _M:Update(delta)
     table.Clear(self.deleteEvents,true);
     -- 已经触发的行为事件（行为事件里面储存有行为树）
     for entityId,event  in ipairs(self.activeEvents) do
-        if not event.treeRoot.curNode then
-            event.treeRoot.curNode = event.treeRoot;
+        --if not event.treeRoot.curNode then
+        --    event.treeRoot.curNode = event.treeRoot;
+        --end
+        --event.treeRoot.curNode:Update(delta);
+        --event.treeRoot.event = event;
+        ---- 执行行为树
+        --self:DoEventTrigger(event.treeRoot,function(finishActionTree)
+        --    -- 行为树执行完成
+        --    table.insert(self.deleteEvents,finishActionTree.event);
+        --end);
+        -- 是否可以被打断
+        if not self.actionEevent or self.actionEevent:CheckTrigger(event) then
+            event:DoActionTree(delta,function(finishEvent)
+                -- 行为树执行完成
+                table.insert(self.deleteEvents,finishEvent);
+            end);
+        else
+            table.insert(self.deleteEvents,event);
         end
-        event.treeRoot.curNode:Update(delta);
-        event.treeRoot.event = event;
-        -- 执行行为树
-        self:DoEventTrigger(event.treeRoot,function(finishActionTree)
-            -- 行为树执行完成
-            table.insert(self.deleteEvents,finishActionTree.event);
-        end);
     end
     -- 行为树执行完成之后就删除
     local deleteEventsCount = #self.deleteEvents;
@@ -125,4 +166,4 @@ require "Data/Script/Battle/AI/ActionTree/Node/ActionNodeBase";
 require "Data/Script/Battle/AI/ActionTree/Node/ActionNodeNormal";
 require "Data/Script/Battle/AI/ActionTree/Node/ActionNodeLevel";
 require "Data/Script/Battle/AI/ActionTree/Node/ActionNodeSkill";
-require "Data/Script/Battle/AI/ActionTree/Trigger/ActionLevelTrigger";
+require "Data/Script/Battle/AI/ActionTree/Trigger/ActionEventTrigger";

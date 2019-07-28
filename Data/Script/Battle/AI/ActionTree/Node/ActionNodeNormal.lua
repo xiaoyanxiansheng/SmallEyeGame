@@ -69,46 +69,43 @@ function ActionUnitNode:GetNextNode()
 end
 -- endregion
 
--- region 平行节点 同帧先后执行
+-- region 并行节点 子节点以子树的方式运行
 local ActionNodeParallel = CreateActionNode(TNN.ActionNodeParallel)
 function ActionNodeParallel:DoAction()
+    -- 等待所有节点执行完毕
     self:WaitAction();
-    self.finishActionTrees = {};
-    self.childCount = self:GetChildCount();
+    -- 激活的事件
+    self.actionEvents = {};
+    local nextNode = self.firstChildNode;
+    while(nextNode) do
+        -- 创建事件行为树
+        local event = ActionEventTrigger.New(ALT.ON_TRIGGER);
+        event.treeRoot = nextNode;
+        nextNode.parentNode = nil;
+        table.insert(self.actionEvents,event);
+
+        nextNode = nextNode.nextChildNode;
+    end
 end
 function ActionNodeParallel:Update(delta)
-    -- 同帧运行所以的子节点 每一个节点都是一个行为树
-    local actionTree = self.firstChildNode;
-    while(actionTree) do
-        local inIndex = table.ContainValue(self.finishActionTrees,actionTree);
-        if inIndex == 0 then
-            if not actionTree.curNode then
-                actionTree.curNode = actionTree;
-                actionTree.curNode:DoAction();
-            end
-            actionTree.curNode:Update(delta);
-            -- 遍历执行
-            while(not actionTree.curNode:CheckActioning()) do
-                local nextNode = actionTree.curNode:GetNextNode();
-                actionTree.curNode = nextNode;
-                if nextNode and nextNode ~= self then
-                    actionTree.curNode:DoAction();
-                else
-                    actionTree.curNode = nil;
-                    table.insert(self.finishActionTrees,actionTree);
-                    break;
-                end
-            end
-        end
-
-        -- 子树全部执行完毕
-        if #self.finishActionTrees >= self.childCount then
-            self:EndAction(self);
+    if not self.actionEvents or #self.actionEvents == 0 then
+        return self:EndAction(self);
+    end
+    for i, v in ipairs(self.actionEvents) do
+        local finishEventIndex = nil;
+        -- 执行子节点行为树
+        v:DoActionTree(delta,function(event)
+            finishEventIndex = i;
+        end);
+        if finishEventIndex and self.actionEvents then
+            table.remove(self.actionEvents,finishEventIndex);
             break;
         end
-
-        actionTree = actionTree.nextChildNode;
     end
+end
+function ActionNodeParallel:Clear()
+    ActionNodeBase.Clear(self);
+    self.actionEvents = nil;
 end
 -- endregion
 

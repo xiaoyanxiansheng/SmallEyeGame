@@ -21,6 +21,7 @@ function _M:ctor(type)
     self.preResult = nil;       -- 运行时 上一节点的运行结果 行为树之间的通信方式
 end
 -- 1 运行
+function _M:DoFirstAction() end
 function _M:DoAction()end
 -- 2 更新
 function _M:Update(delta)end
@@ -48,7 +49,9 @@ end
 
 -- 返回父节点 当子节点全部执行完毕
 function _M:ReturnParentNode()
-    self.parentNode.preResult = self.result;
+    if self.parentNode then
+        self.parentNode.preResult = self.result;
+    end
     self:Clear();
     return self.parentNode;
 end
